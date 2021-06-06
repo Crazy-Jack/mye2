@@ -185,7 +185,19 @@ class StatisticTable(models.Model):
     class Meta:
         db_table = 'StatisticTable'
 
+class SearchTable(models.Model):
+    """User table, store statistic result"""
+    Log2FC = models.FloatField(null=True, db_column='Log2FC')
+    p_value = models.FloatField(null=True, db_column='p_value')
+    padj = models.FloatField(null=True, db_column='padj')
+    minus_log10p = models.FloatField(null=True, db_column='minus_log10p')
+    minus_log10padj = models.FloatField(null=True, db_column='minus_log10padj')
 
+    filename = models.CharField(max_length=255, db_column='filename')
+    GeneName = models.CharField(max_length=255, db_column='GeneName')
+
+    class Meta:
+        db_table = 'CombinedData'
 
 
 ######## END of TABLE UPDATE ########

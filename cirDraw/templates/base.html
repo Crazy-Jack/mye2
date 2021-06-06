@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 
@@ -9,7 +9,7 @@
   <meta name="author" content="Milk Zheng, Jack Li">
   <meta name="keywords" content="circDraw, circRNA, circRNA visualization, RNA modifications, Sun Yat-sen University">
 
-  <title>circDraw</title>
+  <title>E2 Database</title>
   <link rel="icon" href="{% static 'base/img/logo.png' %}">
 
   <!-- Bootstrap core CSS -->
@@ -39,7 +39,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
     <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="{% url 'home' %}">circDraw</a>
+      <a class="navbar-brand js-scroll-trigger" href="{% url 'home' %}">E2 Database</a>
       <button class="navbar-toggler navbar-toggler-right" role="button" data-toggle="collapse" data-target="#navbarResponsive"
         aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         Menu
@@ -47,13 +47,13 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav text-uppercase ml-auto">
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="{% url 'example' %}">Example</a>
-          </li>
+          </li> -->
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="{% url 'tools' %}">Upload</a>
+            <a class="nav-link js-scroll-trigger" href="{% url 'tools' %}">Search</a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="/diy/">Draw</a>
           </li>
           <li class="nav-item">
@@ -61,10 +61,10 @@
           </li>
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="{% url 'manual' %}">Manual</a>
-          </li>
-          <li class="nav-item">
+          </li> -->
+          <!-- <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="{% url 'about' %}">About</a>
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>
@@ -76,18 +76,18 @@
     <div class="container">
       <div class="row">
         <div class="col-md-4">
-          <span class="copyright">Copyright &copy; Sun Yat-sen University<br>School of Life Sciences</span>
+          <span class="copyright">Copyright &copy; <br></span>
         </div>
         <div class="col-md-4">
           <br>
           <ul class="list-inline social-buttons">
             <li class="list-inline-item">
-              <a href="mailto:zhengll33@mail.sysu.edu.cn">
+              <a href="mailto:tianqinl@andrew.cmu.edu">
                 <i class="fas fa-envelope"></i>
               </a>
             </li>
             <li class="list-inline-item">
-              <a href="https://github.com/Mr-Milk/circDraw">
+              <a href="">
                 <i class="fab fa-github"></i>
               </a>
             </li>

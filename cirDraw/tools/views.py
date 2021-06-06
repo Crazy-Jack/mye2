@@ -1,3 +1,4 @@
+import warnings
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.files.storage import default_storage
@@ -15,6 +16,8 @@ import sys, datetime, time
 import ujson, json
 import hashlib
 import csv
+import numpy as np
+import re
 
 # ========================= RENDER PAGES ==============================
 def render_index_page(request):
@@ -25,6 +28,13 @@ def render_upload_page(request):
     """test_render_upload_page"""
     context = {}
     return render(request, 'tools/upload.html', context)
+
+def render_search_page(request):
+    """test_render_search_page"""
+    context = {}
+    return render(request, 'tools/search.html', context)
+
+
 
 def render_display_page(request, md5):
     context = {"md5": md5}
@@ -45,6 +55,131 @@ def render_display_page(request, md5):
         print('This md5 not exist.')
         return render(request, 'tools/HTTP404.html', context)
         #raise Http404
+
+
+# ====================================================================
+@csrf_exempt
+def search_indb(request):
+    assert request.method == "GET", f"request.method is {request.method} not GET"
+    
+    # search for the database to get this form of data
+
+    
+
+    data = {'a': [{
+                    'logfc': 5,
+                    'logp': 4,
+                    'name': 'gene1',
+                    'duration': 0.9,
+                },{
+                    'logfc': 6,
+                    'logp': 7,
+                    'name': 'gene2',
+                    'duration': 0.3,
+                },],
+                'b': [{
+                    'logfc': 10,
+                    'logp': 13,
+                    'name': 'gene1',
+                    'duration': 0.5,
+                },],
+                'c': [{
+                    'logfc': 12,
+                    'logp': 14,
+                    'name': 'gene1',
+                    'duration': 0.5,
+                },],
+                'd': [{
+                    'logfc': 11,
+                    'logp': 16,
+                    'name': 'gene1',
+                    'duration': 0.5,
+                },],
+                'f': [{
+                    'logfc': 10,
+                    'logp': 18,
+                    'name': 'gene1',
+                    'duration': 0.5,
+                },]
+        }
+
+    gene_name = request.GET['gene_name']
+    print(f"gene_name {gene_name}")
+    print(f"Book.objects.count() {SearchTable.objects.count()}")
+
+    data = SearchTable.objects.filter(GeneName__exact = f"\"{gene_name}\"")
+    print(data)
+
+    out_data = {}
+    for data_i in data:
+        logfc = data_i.Log2FC
+        logp = data_i.minus_log10p # change to minus_log10p
+        out_name, hours, dose, M = meta_info_process(data_i.filename)
+        # print(f"data_i.filename {data_i.filename} out {out_name}: hour: {hours}; dose {dose}")
+        # create object to append
+
+        if out_name != 'DEG':
+            obj = {'logfc': float(logfc),
+                    'logp': float(logp),
+                    'name': out_name,
+                    'duration': convert_hour_radius(hours),
+                    'dose': dose,
+                    'M': M,
+                }
+            if out_name not in out_data:
+                out_data[out_name] = [obj]
+            else:
+                out_data[out_name].append(obj)
+
+
+    # print(len(data))
+    # print(out_data)
+
+
+    return JsonResponse(out_data, safe=False)
+
+
+def convert_hour_radius(hours):
+    return np.log(hours + 1) + 1
+
+
+def meta_info_process(filename):
+    """filter the filename"""
+    filename_list = filename.split("_")
+    out_name_list = []
+    hours = 0
+    dose = 0
+    hour_string = ""
+    dose_string = ""
+    
+
+    for piece in filename_list:
+        piece = piece.replace("\"", "")
+        append_switch = 1
+        if 'h' == piece.lower()[-1]:
+            try:
+                hours = int(piece[:-1])
+                append_switch = 0
+            except Exception as e:
+                warnings.warn(f"Warning: Unsuccessful parsing for hours: {e}")
+        if 'nM' == piece[-2:]:
+            try:
+                dose = int(piece[:-2])
+                append_switch = 0
+            except Exception as e:
+                warnings.warn(f"Warning: Unsuccessful parsing for dose: {e}")
+        # cout as part of the name if not be used as dose or hours
+        if append_switch:
+            out_name_list.append(piece)
+    
+    M = out_name_list[0]
+    out_name_list = out_name_list[1:]
+    out_name_list = [p for p in out_name_list if not re.match(r'^\d+', p)]
+    
+    out_name = "_".join(out_name_list) 
+    return out_name, hours, dose, M
+
+
 
 # ======================== UPLOAD & SAVE ==============================
 

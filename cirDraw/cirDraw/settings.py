@@ -84,14 +84,14 @@ WSGI_APPLICATION = 'cirDraw.wsgi.application'
 
 DATABASES = {
     'default': {
-        #'ENGINE': 'django.db.backends.mysql',
-        'ENGINE': 'dj_db_conn_pool.backends.mysql',
-        'NAME': 'circDraw',
+        'ENGINE': 'django.db.backends.mysql',
+        # 'ENGINE': 'dj_db_conn_pool.backends.mysql',
+        'NAME': 'e2database',
         'USER': 'root',
         'PASSWORD': 'mypassword',
         #'HOST': '167.179.90.87',
         'HOST': '127.0.0.1',
-        'PORT': 6603,
+        'PORT': 3306,
         'POOL_OPTIONS': {
             'POOL_SIZE': 50,
             'MAX_OVERFLOW': 10
