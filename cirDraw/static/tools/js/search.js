@@ -138,64 +138,41 @@ $(document).ready(function () {
                 var ctx = canvas.getContext('2d');
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 // Define the data 
-                var data = {'a': [{
-                                logfc: 5,
-                                logp: 4,
-                                name: 'gene1',
-                                duration: 0.9,
-                            },{
-                                logfc: 6,
-                                logp: 7,
-                                name: 'gene2',
-                                duration: 0.3,
-                            },],
-                            'b': [{
-                                logfc: 10,
-                                logp: 13,
-                                name: 'gene1',
-                                duration: 0.5,
-                            },],
-                            'c': [{
-                                logfc: 12,
-                                logp: 14,
-                                name: 'gene1',
-                                duration: 0.5,
-                            },],
-                            'd': [{
-                                logfc: 11,
-                                logp: 16,
-                                name: 'gene1',
-                                duration: 0.5,
-                            },],
-                            'f': [{
-                                logfc: 10,
-                                logp: 18,
-                                name: 'gene1',
-                                duration: 0.5,
-                            },]
-                    }
-                    // Add data values to array
-                    
-                    var colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
-                                    '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
-                                    '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
-                                    '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
-                                    '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
-                                    '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
-                                    '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
-                                    '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
-                                    '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
-                                    '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
-                    
-                    
+                
+                // Add data values to array
+                
+                var colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#53FA04', '#00B3E6', 
+                                '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+                                '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
+                                '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+                                '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
+                                '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+                                '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
+                                '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+                                '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
+                                '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
+                
+                
 
                     data = processResult;
                     var mydatasets = [];
                     var count = 0
                     for (var i in data) {
                         var item_radius = [];
+                        var pointstyles = [];
                         for (var k=0; k < data[i].length; k ++) {
                             item_radius.push(data[i][k].duration * 2);
+                            // get dose
+                            var dose_k = data[i][k].dose;
+                            if (dose_k == 1) {
+                                var pointstyle = 'circle';
+                            } else if (dose_k == 10) {
+                                var pointstyle = 'triangle';
+                            } else if (dose_k == 1000) {
+                                var pointstyle = 'square';
+                            }
+
+                            pointstyles.push(pointstyle)
                         }
                         var item = {
                             radius: item_radius,
@@ -203,7 +180,7 @@ $(document).ready(function () {
                             data: data[i],
                             borderColor: colorArray[count],
                             backgroundColor: colorArray[count],
-                            pointStyle: 'circle'
+                            pointStyle: pointstyles
                         }
                         mydatasets.push(item);
                         count += 1;
@@ -215,36 +192,135 @@ $(document).ready(function () {
                         
                     }
                     else {
-                        // // add line
-                        // mydatasets.push({
-                        //     data: [{
-                        //        x: 1,
-                        //        y: 1
-                        //     }, {
-                        //        x: 3,
-                        //        y: 7
-                        //     }, {
-                        //        x: 6,
-                        //        y: 5
-                        //     }, { // add same data as the first one, to draw the closing line
-                        //        x: 1,
-                        //        y: 1
-                        //     }],
-                        //     borderColor: 'black',
-                        //     borderWidth: 1,
-                        //     pointBackgroundColor: ['#000', '#00bcd6', '#d300d6'],
-                        //     pointBorderColor: ['#000', '#00bcd6', '#d300d6'],
-                        //     pointRadius: 5,
-                        //     pointHoverRadius: 5,
-                        //     fill: false,
-                        //     tension: 0,
-                        //     showLine: true
-                        //  },)
                         
                         console.log(mydatasets);
                         
+                        // =========================================================
+                        // create legends
+                        // var colorList = [{'backgroundColor': '#FF6633', 'borderColor': '#FF6633', 'label': 'MCF7'},
+                        //                 {'backgroundColor': '#FFB399', 'borderColor': '#FFB399', 'label': 'MM231'}]
+                        // {t1: 'red', t2: 'green', t3: 'blue'};
+                        var colorList = mydatasets;
+                        colorize = function(colorList) {
+                            var container = document.getElementById('legend_container');
+                        
+                            for (var item in colorList) {
+                                console.log(item);
+                                var boxContainer = document.createElement("DIV");
+                                var box = document.createElement("DIV");
+                                var label = document.createElement("DIV");
 
-                        // End Defining data
+                                label.innerHTML = colorList[item]['label'] + "                                ";
+                                box.className = "box";
+                                box.style.backgroundColor = colorList[item]['backgroundColor'];
+                                box.style.borderColor = colorList[item]['borderColor'];
+                                box.style.textIndent = '20em';
+
+                                boxContainer.className = "box-contain";
+                                label.className = "label";
+                                boxContainer.appendChild(box);
+                                boxContainer.appendChild(label);
+
+                                container.appendChild(boxContainer);
+
+                            }
+                        }
+
+                        colorize(colorList);
+                        
+                        // =========================================================
+                        // duration container
+                        // var colorList_dose = {'1h': "10px", '2h': "10px", '3h': "30%", '4h': "40%", 
+                        //                     '6h': 0.5, '8h': 0.6, '12h': 0.7, '16h': 0.8, '18h': 0.9, '24h': 0.95, '48h': 1};
+                        colorList_duration = [1, 2, 3, 4, 6, 8, 12, 16, 18, 24, 48];
+                        colorList_dose = [1, 10, 1000];
+                        colorize_duration = function(colorList, colorList_dose) {
+                            var container = document.getElementById('duration_container');
+                        
+                            for (var item in colorList) {
+                                // console.log(item);
+                                // console.log(colorList[item]);
+                                var boxContainer2 = document.createElement("DIV");
+                                var boxContainer = document.createElement("DIV");
+                                var boxContainer_t = document.createElement("DIV");
+                                var box = document.createElement("DIV");
+                                var label = document.createElement("DIV");
+
+                                label.innerHTML = colorList[item] + " h  ";
+                                box.className = "circle";
+                                var size = Math.log10(colorList[item] + 1) * 13;
+                                box.style.height = size + "px";
+                                box.style.width = size + "px";
+                                
+                                box.style.textIndent = '20em';
+
+                                boxContainer2.className = "box-contain";
+                                boxContainer.className = "circle-contain";
+                                boxContainer_t.className = "label-contain";
+                                label.className = "label";
+                                boxContainer.appendChild(box);
+
+                                boxContainer2.appendChild(boxContainer);
+                                
+                                boxContainer_t.appendChild(label)
+                                boxContainer2.appendChild(boxContainer_t);
+                                
+                                container.appendChild(boxContainer2);
+
+                            }
+
+                            for (var item in colorList_dose) {
+                                var boxContainer2 = document.createElement("DIV");
+                                var boxContainer = document.createElement("DIV");
+                                var boxContainer_t = document.createElement("DIV");
+                                var box = document.createElement("DIV");
+                                var label = document.createElement("DIV");
+                                
+                                if (colorList_dose[item] == 1) {
+                                    var dose = '1 nM';
+                                    var shape = 'circle';
+                                } else if (colorList_dose[item] == 10) {
+                                    var dose = '10 nM';
+                                    var shape = 'triangle';
+                                } else if (colorList_dose[item] == 1000) {
+                                    var dose = '1000 nM';
+                                    var shape = 'box';
+                                }
+                                label.innerHTML = dose;
+                                box.className = shape;
+                                if (shape == 'box' || shape == 'circle') {
+                                    var size = Math.log10(24 + 1) * 14;
+                                    box.style.height = size + "px";
+                                    box.style.width = size + "px";
+                                    box.style.textIndent = '20em';
+                                    box.style.backgroundColor = "#FA1304";
+                                    box.style.borderColor = "#FA1304";
+                                }
+                                
+                                
+                            
+                                
+
+                                boxContainer2.className = "box-contain";
+                                boxContainer.className = "circle-contain";
+                                boxContainer_t.className = "label-contain";
+                                label.className = "label";
+                                boxContainer.appendChild(box);
+
+                                boxContainer2.appendChild(boxContainer);
+                                
+                                boxContainer_t.appendChild(label)
+                                boxContainer2.appendChild(boxContainer_t);
+                                
+                                container.appendChild(boxContainer2);
+                            }
+                        }
+
+                        colorize_duration(colorList_duration, colorList_dose);
+
+
+                        // =========================================================
+                        // Define Chart
                         var myChart = new Chart(ctx, {
                             type: 'scatter',
                             data: {
@@ -253,6 +329,9 @@ $(document).ready(function () {
                             options: {
                                 // responsive: true,
                                 // events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
+                                legend: {
+                                    display: false
+                                 },
                                 parsing: {
                                     xAxisKey: 'logfc',
                                     yAxisKey: 'logp',
@@ -262,16 +341,17 @@ $(document).ready(function () {
                             plugins: {
                                 legend: {
                                     position: 'right',
+                                    display: false
                                 },
                                 title: {
-                                    display: true,
-                                    text: ''
+                                    display: false,
+                                    text: 'Title'
                                 },
                                 tooltip: {
                                     callbacks: {
                                         label: function(context) {
-                                            var dur = Math.round(Math.exp(context.raw.duration - 1) - 1);
-                                            return context.raw.name + '_' + context.raw.M + ': Duration: ' + dur + ' H ; logfc: ' + Number.parseFloat(context.raw.logfc).toPrecision(2) + '; ' + '-log adj p value: ' + Number.parseFloat(context.raw.logp).toPrecision(2)
+                                            var dur = Math.round(Math.exp(context.raw.duration - 1));
+                                            return context.raw.name + ': Duration: ' + dur + ' H ; logfc: ' + Number.parseFloat(context.raw.logfc).toPrecision(2) + '; ' + '-log adj p value: ' + Number.parseFloat(context.raw.logp).toPrecision(2)
                                         },
                                         
                                     }

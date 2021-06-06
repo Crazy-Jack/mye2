@@ -107,29 +107,35 @@ def search_indb(request):
     print(f"gene_name {gene_name}")
     print(f"Book.objects.count() {SearchTable.objects.count()}")
 
-    data = SearchTable.objects.filter(GeneName__exact = f"\"{gene_name}\"")
+    data = SearchTable.objects.filter(GeneName__exact = gene_name)
     print(data)
 
     out_data = {}
     for data_i in data:
         logfc = data_i.Log2FC
         logp = data_i.minus_log10p # change to minus_log10p
-        out_name, hours, dose, M = meta_info_process(data_i.filename)
+        CellLine = data_i.CellLine
+        RepL = data_i.RepL
+        DataSet = data_i.DataSet
+        Dose = data_i.Dose
+        Rep = data_i.Rep
+        Duration = data_i.Duration
+        
         # print(f"data_i.filename {data_i.filename} out {out_name}: hour: {hours}; dose {dose}")
         # create object to append
 
-        if out_name != 'DEG':
-            obj = {'logfc': float(logfc),
-                    'logp': float(logp),
-                    'name': out_name,
-                    'duration': convert_hour_radius(hours),
-                    'dose': dose,
-                    'M': M,
-                }
-            if out_name not in out_data:
-                out_data[out_name] = [obj]
-            else:
-                out_data[out_name].append(obj)
+        
+        obj = {'logfc': float(logfc),
+                'logp': float(logp),
+                'name': CellLine,
+                'duration': convert_hour_radius(Duration),
+                'dose': Dose,
+                'DataSet': DataSet,
+            }
+        if CellLine not in out_data:
+            out_data[CellLine] = [obj]
+        else:
+            out_data[CellLine].append(obj)
 
 
     # print(len(data))
@@ -140,7 +146,7 @@ def search_indb(request):
 
 
 def convert_hour_radius(hours):
-    return np.log(hours + 1) + 1
+    return np.log(hours + 1)
 
 
 def meta_info_process(filename):

@@ -196,6 +196,13 @@ class SearchTable(models.Model):
     filename = models.CharField(max_length=255, db_column='filename')
     GeneName = models.CharField(max_length=255, db_column='GeneName')
 
+    CellLine = models.CharField(max_length=255, db_column='CellLine', default="")
+    RepL = models.CharField(max_length=255, db_column='RepL', default="")
+    DataSet = models.CharField(max_length=255, db_column='DataSet', default="")
+    Dose = models.IntegerField(db_column='Dose', default="")
+    Rep = models.IntegerField(db_column='Rep', default="")
+    Duration = models.IntegerField(db_column='Duration', default="")
+
     class Meta:
         db_table = 'CombinedData'
 

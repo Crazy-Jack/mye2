@@ -180,12 +180,74 @@ background: url('../../../media/close.png') no-repeat center center;
 	height: 100%;
 	
 	/* Position the items */
-	// &:nth-child(2) { top: 25%; }
+	/* // &:nth-child(2) { top: 25%; }
 	// &:nth-child(3) { top: 50%; }
-	// &:nth-child(4) { top: 75%; }
+	// &:nth-child(4) { top: 75%; } */
+}
+
+.box {
+  display: inline-block;
+  height: 15px;
+  width: 40px;
+  border: 2px solid;
+}
+
+.box-contain {
+  /* border: 10px; */
+  height: 30px;
+  padding: 1px;
+  width: 120px;
+  display: flex;
 }
 
 
+.label {
+  border-left: 2px;
+  padding-left: 5px;
+  font-size: 10px;
+  text-align: center;
+  display: table-cell;
+  vertical-align:middle;
+}
+
+.horizon-flex-contain {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.chart-container {
+  padding: 10px;
+}
+
+.circle {
+  height: 25px;
+  width: 25px;
+  background-color: #494b4d;
+  border-radius: 50%;
+}
+
+.circle-contain {
+  height: 25px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+}
+.label-contain {
+  height: 25px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+}
+
+
+.triangle {
+  width: 0; 
+  height: 0; 
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 14px solid red;
+}
 
 .lds-roller {
         display: inline-block;
