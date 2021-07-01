@@ -97,7 +97,7 @@ body {
         margin-top: 5px;
 }
 
-.btn-primary.disabled, .btn-primary:disabled {
+.btn-primary.disabled, .btn-primary:disabled, .btn-primary {
         color: #fff;
         background-color: #fed168;
         border-color: #fed168;
@@ -188,7 +188,14 @@ background: url('../../../media/close.png') no-repeat center center;
 .box {
   display: inline-block;
   height: 15px;
-  width: 40px;
+  width: 10px;
+  border: 2px solid;
+}
+
+.box:hover {
+  display: inline-block;
+  height: 20px;
+  width: 15px;
   border: 2px solid;
 }
 
@@ -196,16 +203,31 @@ background: url('../../../media/close.png') no-repeat center center;
   /* border: 10px; */
   height: 30px;
   padding: 1px;
+  width: 70px;
+  display: flex;
+}
+
+
+
+.stats-contain {
+  /* border: 10px; */
+  height: 30px;
+  padding: 1px;
   width: 120px;
   display: flex;
 }
 
+.horizon {
+  display: flex;
+}
 
 .label {
   border-left: 2px;
   padding-left: 5px;
   font-size: 10px;
   text-align: center;
+  width: 5em;
+  text-align: left;
   display: table-cell;
   vertical-align:middle;
 }
@@ -247,6 +269,71 @@ background: url('../../../media/close.png') no-repeat center center;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-bottom: 14px solid red;
+}
+
+
+.custom-select {
+  width: 50em;
+  display: flex;
+}
+
+.selection {
+  border-left: 10px;
+  padding-left: 20px;
+}
+
+
+.hidden
+{
+   display: none
+}
+
+
+[data-tooltip]:before {            
+  position : absolute;
+   content : attr(data-tooltip);
+   opacity : 0;
+}
+
+[data-tooltip]:hover:before {        
+  opacity : 1;
+}
+
+.visible {
+  height: 3em;
+  width: 10em;
+  background: yellow;
+}
+.button{
+   display:inline-block;
+   padding:0.7em 1.4em;
+   margin:0 0.3em 0.3em 0;
+   border-radius:0.15em;
+   box-sizing: border-box;
+   text-decoration:none;
+   font-family:'Roboto',sans-serif;
+   text-transform:uppercase;
+   font-weight:400;
+   color:#FFFFFF;
+   background-color:#3369ff;
+   box-shadow:inset 0 -0.6em 0 -0.35em rgba(0,0,0,0.17);
+   text-align:center;
+   position:relative;
+  }
+
+.button6:active{
+   top:0.1em;
+}
+
+@media all and (max-width:30em){
+   a.button6{
+    display:block;
+    margin:0.4em auto;
+  }
+}
+
+input.hint {
+  color: grey;
 }
 
 .lds-roller {

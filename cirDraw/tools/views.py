@@ -66,84 +66,162 @@ def search_indb(request):
 
     
 
-    data = {'a': [{
-                    'logfc': 5,
-                    'logp': 4,
-                    'name': 'gene1',
-                    'duration': 0.9,
-                },{
-                    'logfc': 6,
-                    'logp': 7,
-                    'name': 'gene2',
-                    'duration': 0.3,
-                },],
-                'b': [{
-                    'logfc': 10,
-                    'logp': 13,
-                    'name': 'gene1',
-                    'duration': 0.5,
-                },],
-                'c': [{
-                    'logfc': 12,
-                    'logp': 14,
-                    'name': 'gene1',
-                    'duration': 0.5,
-                },],
-                'd': [{
-                    'logfc': 11,
-                    'logp': 16,
-                    'name': 'gene1',
-                    'duration': 0.5,
-                },],
-                'f': [{
-                    'logfc': 10,
-                    'logp': 18,
-                    'name': 'gene1',
-                    'duration': 0.5,
-                },]
-        }
+    # data = {'a': [{
+    #                 'logfc': 5,
+    #                 'logp': 4,
+    #                 'name': 'gene1',
+    #                 'duration': 0.9,
+    #             },{
+    #                 'logfc': 6,
+    #                 'logp': 7,
+    #                 'name': 'gene2',
+    #                 'duration': 0.3,
+    #             },],
+    #             'b': [{
+    #                 'logfc': 10,
+    #                 'logp': 13,
+    #                 'name': 'gene1',
+    #                 'duration': 0.5,
+    #             },],
+    #             'c': [{
+    #                 'logfc': 12,
+    #                 'logp': 14,
+    #                 'name': 'gene1',
+    #                 'duration': 0.5,
+    #             },],
+    #             'd': [{
+    #                 'logfc': 11,
+    #                 'logp': 16,
+    #                 'name': 'gene1',
+    #                 'duration': 0.5,
+    #             },],
+    #             'f': [{
+    #                 'logfc': 10,
+    #                 'logp': 18,
+    #                 'name': 'gene1',
+    #                 'duration': 0.5,
+    #             },]
+    #     }
 
     gene_name = request.GET['gene_name']
     print(f"gene_name {gene_name}")
-    print(f"Book.objects.count() {SearchTable.objects.count()}")
+    
 
     data = SearchTable.objects.filter(GeneName__exact = gene_name)
-    print(data)
+    
+    print(f"microarray data.objects.count() {len(data)}")
+
+    all_out_data = []
 
     out_data = {}
+
+    # get unique duration, dose
+
     for data_i in data:
         logfc = data_i.Log2FC
-        logp = data_i.minus_log10p # change to minus_log10p
-        CellLine = data_i.CellLine
+        logp = data_i.minus_log10padj # ?????
+        CellLine = data_i.CellLine.replace(" ", "")
         RepL = data_i.RepL
         DataSet = data_i.DataSet
         Dose = data_i.Dose
         Rep = data_i.Rep
         Duration = data_i.Duration
-        
-        # print(f"data_i.filename {data_i.filename} out {out_name}: hour: {hours}; dose {dose}")
-        # create object to append
+        GSE = data_i.GSE
 
-        
         obj = {'logfc': float(logfc),
                 'logp': float(logp),
                 'name': CellLine,
                 'duration': convert_hour_radius(Duration),
                 'dose': Dose,
                 'DataSet': DataSet,
+                'GSE': GSE,
             }
         if CellLine not in out_data:
             out_data[CellLine] = [obj]
         else:
             out_data[CellLine].append(obj)
+    # calculate stats
+    stats_1 = calculate_statistics(out_data, threshold_fc=0.5)
+
+    all_out_data.append(out_data)
+    
+    
+    # RNAseq
+    data = SearchTableRNAseq.objects.filter(GeneName__exact = gene_name)
+    print(f"RNAseq data.objects.count() {len(data)}")
+    out_data = {}
+    for data_i in data:
+        logfc = data_i.Log2FC
+        logp = data_i.minus_log10padj # ???
+        CellLine = data_i.CellLine.replace(" ", "")
+        Dose = data_i.Dose
+        Rep = data_i.Rep
+        Duration = data_i.Duration
+        GSE = data_i.GSE
+        
+        # print(f"data_i.filename {data_i.filename} out {out_name}: hour: {hours}; dose {dose}")
+        # create object to append
+
+        duration, multi_duration = convert_RNAseq_hour_radius(Duration)
 
 
-    # print(len(data))
-    # print(out_data)
+        obj = {'logfc': float(logfc),
+                'logp': float(logp),
+                'name': CellLine,
+                'duration': duration,
+                'multi_duration': multi_duration,
+                'dose': Dose,
+                'GSE': GSE,
+            }
+        if CellLine not in out_data:
+            out_data[CellLine] = [obj]
+        else:
+            out_data[CellLine].append(obj)
+    stats_2 = calculate_statistics(out_data, threshold_fc=2.0)
+
+    all_out_data.append(out_data)
+
+    all_out_data.append(stats_1)
+    all_out_data.append(stats_2)
+    return JsonResponse(all_out_data, safe=False)
 
 
-    return JsonResponse(out_data, safe=False)
+def calculate_statistics(out_data, threshold_fc):
+    # calculate stats for (sig_downregulated, middle, sig_upregulated)
+    stats = {}
+    for i in out_data:
+        stats_i = [0, 0] # sig_down, sig_up
+        for j in out_data[i]:
+            # print(j)
 
+            if j['logfc'] > 0 :
+                if (j['logp'] == 0 and j['logfc'] > threshold_fc) or (j['logp'] >= 1.0):
+                    stats_i[1] += 1
+            elif j['logfc'] < 0:
+                if (j['logp'] == 0 and j['logfc'] < -threshold_fc) or (j['logp'] >= 1.0):
+                    stats_i[0] += 1
+               
+        i_sum = stats_i[0] + stats_i[1]
+        
+        stats_i[0], stats_i[1] = round(stats_i[0]/len(out_data[i]), 2), round(stats_i[1]/len(out_data[i]), 2)
+        
+    
+        stats[i] = stats_i
+    print(f"stats {stats}")
+    return stats
+
+        
+
+        
+
+
+
+def convert_RNAseq_hour_radius(hours):
+    if "-" in hours:
+        hours = [float(i) for i in hours.split("-")]
+        return convert_hour_radius(np.mean(hours)), True
+    else:
+        return convert_hour_radius(float(hours)), False
 
 def convert_hour_radius(hours):
     return np.log(hours + 1)

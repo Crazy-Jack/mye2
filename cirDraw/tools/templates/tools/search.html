@@ -3,91 +3,139 @@
 {% load static %}
 
 {% block content %}
-<div class="container" style="padding-top: 55px;">
-  <div class="form-group">
-    <br>
-    <p class="inlineText">Species</p>
-    <select class="selectpicker inlineSelector" id="species">
-      <option>Human (hg19)</option>
-      <option>Human (hg38)</option>
-      <option>Mouse (mm10)</option>
-      <option>Rat (rn6)</option>
-      <option>Yeast (sacCer3)</option>
-      <option>Zebra Fish (danRer11)</option>
-    </select>
-    <p>Search your gene of interest to get its relevant results</p>
+<div id="search-container" class="container" style="padding-top: 55px;">
 
-    <!--<p class="inlineText">Set Density threshold( 1 ~ 100 ): </p><input type="text" id="denvalue" class="inlineInput" value="10">-->
-  </div>
-  <!-- <div class="center">
-    <div class="textarea" contenteditable="true">
-    <p style="color: grey">Only for displaying example data</p>
-    </div>
-    <button type="button" class="btn btn-primary btn-sm" id="example">Example</button>
-  </div> -->
-
-  <!--
-  <div id="drop-select-file"></div>
-  <form action="/tools/upload/" class="dropzone">
-    <div class="fallback">
-      <input name="file" type="file" multiple />
-    </div>
-  </form>-->
-
-  <div id="uploadarea" class="center">
+  <div id="uploadarea" class="center horizon">
     
     <form id="fileform" action="/search/">
       {% csrf_token %}
       <label for="fname">Gene name:</label>
-      <input type="text" id="fname" name="fname">
+      <input type="text" id="fname" class="hint" name="fname" value="GREB1"  
+          onfocus="if (this.className=='hint') { this.className = ''; this.value = 'GREB1'; }"
+          onblur="if (this.value == '') { this.className = 'hint'; this.value = 'GREB1'; }">
       <input type="submit" id="submit" value="Search">
+      <!-- <a id="refresher" href='/tools/'><i class="fas fa-redo-alt ml-1"></i></a> -->
     </form>
+    <div id="processtip" style="margin-left: 10px; margin-top: 7px;"></div>
+  </div>
 
+  <!-- <span class="demo" title="hello" data-tipso="I'm a tooltip">Hover me</span> -->
+<div id="myfilterbox" class="listbox-area hidden">
+  <div>
+    <span id="ss_elem" class="listbox-label"><b>Filtering:</b></span>
+    <div style="display:flex;">
+      <div>
+        <span>Cell Line:</span>
+        <ul class="ss_elem_list" id="ss_elem_list1" tabindex="0" role="listbox" aria-labelledby="ss_elem"> 
+          <li id="ss_elem_Np" role="option">Neptunium</li>
+          <li id="ss_elem_Pu" role="option">Plutonium</li>
+          <li id="ss_elem_Am" role="option">Americium</li>
+          <li id="ss_elem_Cm" role="option">Curium</li>
+          <li id="ss_elem_Bk" role="option">Berkelium</li>
+          <li id="ss_elem_Cf" role="option">Californium</li>
+          <li id="ss_elem_Es" role="option">Einsteinium</li>
+          <li id="ss_elem_Fm" role="option">Fermium</li>
+          <li id="ss_elem_Md" role="option">Mendelevium</li>
+          <li id="ss_elem_No" role="option">Nobelium</li>
+          <li id="ss_elem_Lr" role="option">Lawrencium</li>
+          <li id="ss_elem_Rf" role="option">Rutherfordium</li>
+          <li id="ss_elem_Db" role="option">Dubnium</li>
+          <li id="ss_elem_Sg" role="option">Seaborgium</li>
+          <li id="ss_elem_Bh" role="option">Bohrium</li>
+          <li id="ss_elem_Hs" role="option">Hassium</li>
+          <li id="ss_elem_Mt" role="option">Meitnerium</li>
+          <li id="ss_elem_Ds" role="option">Darmstadtium</li>
+          <li id="ss_elem_Rg" role="option">Roentgenium</li>
+          <li id="ss_elem_Cn" role="option">Copernicium</li>
+          <li id="ss_elem_Nh" role="option">Nihonium</li>
+          <li id="ss_elem_Fl" role="option">Flerovium</li>
+          <li id="ss_elem_Mc" role="option">Moscovium</li>
+          <li id="ss_elem_Lv" role="option">Livermorium</li>
+          <li id="ss_elem_Ts" role="option">Tennessine</li>
+          <li id="ss_elem_Og" role="option">Oganesson</li>
+        </ul>
+      </div>
+      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 200px;">&nbsp;</div>
+      <div style="font-size:30px; padding:15px; ">&nbsp;</div>
+      <div>
+        <span>Duration:</span>
+        <ul class="ss_elem_list" id="ss_elem_list2" tabindex="0" role="listbox" aria-labelledby="ss_elem"> 
+          <li id="ss_elem_2_1" role="option">1 hour</li>
+          <li id="ss_elem_2_2" role="option">2 hour</li>
+          <li id="ss_elem_2_3" role="option">3 hour</li>
+          <li id="ss_elem_2_4" role="option">4 hour</li>
+          <li id="ss_elem_2_5" role="option">6 hour</li>
+          <li id="ss_elem_2_6" role="option">8 hour</li>
+          <li id="ss_elem_2_7" role="option">12 hour</li>
+          <li id="ss_elem_2_8" role="option">16 hour</li>
+          <li id="ss_elem_2_9" role="option">18 hour</li>
+          <li id="ss_elem_2_10" role="option">24 hour</li>
+          <li id="ss_elem_2_11" role="option">48 hour</li>
+        </ul>
+      </div>
 
-    <!-- <form id="fileform" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      <label class="btn btn-primary btn-sm" for="fileupload" id="uploadlabel" onclick="document.getElementById('myfile').click();">
-        + Select File
-        <input type="file" id="myfile" name="myfile" style="display:none">
-      </label>
+      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 200px;">&nbsp;</div>
+      <div style="font-size:30px; padding:15px; ">&nbsp;</div>
+      <div>
+        <span>Dose:</span>
+        <ul class="ss_elem_list" id="ss_elem_list3" tabindex="0" role="listbox" aria-labelledby="ss_elem"> 
+          <li id="ss_elem_3_1" role="option">1 nM</li>
+          <li id="ss_elem_3_2" role="option">10 nM</li>
+          <li id="ss_elem_3_3" role="option">1000 nM</li>
+        </ul>
+      </div>
 
-      <button class="btn btn-primary btn-sm" id="submit" style="margin-bottom: .5rem">Search</button>
-      
-                  <label class="btn btn-primary btn-sm" for="submit" id="submitstatus">
-                  Submit
-                      <input type="submit" id="submit" style="display:none">
-                    </label>
-      <p id="filename" style="display: inline-block"></p><span id='cancel' class="ml-1 pb-1" style="display: none;"><img style="width: 20px;cursor: pointer;" src='../../../media/delete.svg'></span>
-
-    </form> -->
+      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 200px;">&nbsp;</div>
+      <div style="font-size:30px; padding:15px; ">&nbsp;</div>
+      <div>
+        <span>Adjusted p-value (<)</span>
+        <ul class="ss_elem_list" id="ss_elem_list4" tabindex="0" role="listbox" aria-labelledby="ss_elem"> 
+          <li id="ss_elem_4_1" role="option">0.05</li>
+          <li id="ss_elem_4_2" role="option">0.1</li>
+          <li id="ss_elem_4_3" role="option">ALL</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
     
 
-
-
-  </div>
-
   <!-- <p id="aftersubmit"></p> -->
-  <p id="processtip"></p>
-  <div><p id="aftersubmit"></p></div>
-  <div class="horizon-flex-contain">
-    <div class="chart-container" style="position: relative; height:80vh; width:45vw">
-      <canvas id="myChart"></canvas> 
-    </div>
-    <div id="legend_container"></div>
-    <div id="duration_container"></div>
+  
+  <div><p id="aftersubmit1"></p></div>
+  <div><p id="aftersubmit2"></p></div>
+  <!-- <div id="dashline1"></div> -->
+  <div id="figure1" class="horizon-flex-contain">
+    
+      <div class="chart-container" style="position: relative; height:60vh; width:45vw">
+        <div id="chart1-title-id" style="text-align: center;"></div>
+        <canvas id="myChart"></canvas> 
+      </div>
+      <div id="duration_container"></div>
+      <div id="legend_container"></div>
+      <div id="legend_stats"></div>
+    
+    
   </div>
-  <canvas id="circles" style="position: relative; height:10vh; width:60vw"></canvas>
   
+  <div id="dashline2"></div>
 
-  <!--<div class="progress col-sm-8" id="progressbar">
-                    <div id='bar' class="progress-bar" role="progressbar" style="width: 0%;background:#fed136;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-                  </div>-->
-</div>
-
-</div>
-<div class="container mb-5 mt-5">
+  <div id="figure2" class="horizon-flex-contain">
+    <div class="chart-container" style="position: relative; height:60vh; width:45vw">
+      <div id="chart2-title-id" style="text-align: center;"></div>
+      <canvas id="myChart_rna"></canvas> 
+    </div>
+    <div id="duration_container_rna"></div>
+    <div id="legend_container_rna"></div>
+    <div id="legend_stats_rna"></div>
+   
+    
+  </div>
   
 </div>
+
+</div>
+
 
 
 <!-- Upload -->
@@ -100,4 +148,6 @@
 -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
 <script src="{% static 'tools/js/search.js' %}"></script>
+<script src="{% static 'tools/js/select.js' %}"></script>
+<script src="{% static 'tools/js/tipso.js' %}"></script>
 {% endblock %}

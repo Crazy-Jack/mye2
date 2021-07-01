@@ -202,10 +202,35 @@ class SearchTable(models.Model):
     Dose = models.IntegerField(db_column='Dose', default="")
     Rep = models.IntegerField(db_column='Rep', default="")
     Duration = models.IntegerField(db_column='Duration', default="")
+    GSE = models.CharField(max_length=255, db_column='GSE', default="")
 
     class Meta:
         db_table = 'CombinedData'
 
+class SearchTableRNAseq(models.Model):
+    """RNAseq table"""
+    Log2FC = models.FloatField(null=True, db_column='Log2FC')
+    lfcSE = models.FloatField(null=True, db_column='lfcSE')
+    stat = models.FloatField(null=True, db_column='stat')
+    p_value = models.FloatField(null=True, db_column='pvalue')
+    padj = models.FloatField(null=True, db_column='padj')
+    
+    ensembl = models.CharField(max_length=255, db_column='ensembl')
+    entrezgene_id = models.IntegerField(db_column='entrezgene_id', default="")
+    GeneName = models.CharField(max_length=255, db_column='GeneName')
+
+    CellLine = models.CharField(max_length=255, db_column='CellLine', default="")
+    GSE = models.CharField(max_length=255, db_column='GSE', default="")
+    Rep = models.IntegerField(db_column='Rep', default="")
+    Dose = models.FloatField(null=True, db_column='Dose')
+    
+    Duration = models.CharField(max_length=255, db_column='Duration', default="")
+    
+
+    minus_log10padj = models.FloatField(null=True, db_column='minus_log10padj')
+
+    class Meta:
+        db_table = 'RNAseqData'
 
 ######## END of TABLE UPDATE ########
 # class ToolsChromosome(models.Model):
