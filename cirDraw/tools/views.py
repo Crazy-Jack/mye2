@@ -60,6 +60,7 @@ def render_display_page(request, md5):
 # ====================================================================
 @csrf_exempt
 def search_indb(request):
+    start_time = time.time()
     assert request.method == "GET", f"request.method is {request.method} not GET"
     
     # search for the database to get this form of data
@@ -106,17 +107,17 @@ def search_indb(request):
     gene_name = request.GET['gene_name']
     print(f"gene_name {gene_name}")
     
-
+    start_mr_search_time = time.time()
     data = SearchTable.objects.filter(GeneName__exact = gene_name)
-    
+    print(f"microarray seach time {time.time() - start_mr_search_time} s")
     print(f"microarray data.objects.count() {len(data)}")
 
     all_out_data = []
-
+    
     out_data = {}
 
     # get unique duration, dose
-
+    st_iter = time.time()
     for data_i in data:
         logfc = data_i.Log2FC
         logp = data_i.minus_log10padj # ?????
@@ -140,16 +141,22 @@ def search_indb(request):
             out_data[CellLine] = [obj]
         else:
             out_data[CellLine].append(obj)
+    print(f"time for object iteration {time.time() - st_iter}")
     # calculate stats
+    start_calculate_stats_time = time.time()
     stats_1 = calculate_statistics(out_data, threshold_fc=0.5)
+    print(f"time for calculate stats {time.time() - start_calculate_stats_time}")
 
     all_out_data.append(out_data)
     
     
     # RNAseq
+    start_rna_search_time = time.time()
     data = SearchTableRNAseq.objects.filter(GeneName__exact = gene_name)
+    print(f"RNA seach time {time.time() - start_rna_search_time} s")
     print(f"RNAseq data.objects.count() {len(data)}")
     out_data = {}
+    st_iter_rna = time.time()
     for data_i in data:
         logfc = data_i.Log2FC
         logp = data_i.minus_log10padj # ???
@@ -177,12 +184,17 @@ def search_indb(request):
             out_data[CellLine] = [obj]
         else:
             out_data[CellLine].append(obj)
+    print(f"RNA-seq iter {time.time() - st_iter_rna}")
     stats_2 = calculate_statistics(out_data, threshold_fc=2.0)
-
+    print(f"RNA-seq processing time {time.time() - st_iter_rna}")
     all_out_data.append(out_data)
 
     all_out_data.append(stats_1)
     all_out_data.append(stats_2)
+    end_time = time.time()
+
+    total_time = end_time - start_time
+    print(f"Total time {total_time} s")
     return JsonResponse(all_out_data, safe=False)
 
 

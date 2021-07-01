@@ -30,6 +30,7 @@ $(document).ready(function () {
     // ===================== Submit ===============
     $('#submit').click(function (e) {
         e.preventDefault();
+        var start_time = Date.now();
         //e.stopPropagation();
         
         // console.log($('#fname').val());
@@ -46,6 +47,7 @@ $(document).ready(function () {
                 'gene_name': gene_name
             }).done(function(processResult){
                 // console.log("I'm done loading data")
+                console.log("Network response " + (Date.now() - start_time)/1000 + " s")
                 document.getElementById("processtip").innerHTML = "";
                 window.click_once = true;
                 
@@ -77,6 +79,7 @@ $(document).ready(function () {
                 
 
                     data = processResult[0];
+                    console.log("mydataset processing start time " + Date.now())
                     mydatasets = [];
                     var count = 0
                     var max_len = 0
@@ -93,7 +96,7 @@ $(document).ready(function () {
                             } else if (dose_k == 10) {
                                 var pointstyle = 'triangle';
                             } else if (dose_k == 1000) {
-                                var pointstyle = 'square';
+                                var pointstyle = 'rect';
                             }
 
                             pointstyles.push(pointstyle);
@@ -120,6 +123,8 @@ $(document).ready(function () {
                     // sort
                     mydatasets.sort((a, b) => (a.data.length < b.data.length) ? 1 : -1);
                     window.mydatasets = mydatasets;
+
+                    console.log("mydataset processing end time " + Date.now())
                     // // console.log(mydatasets.length)
                     document.getElementById("legend_container").innerHTML = "";
                     document.getElementById("duration_container").innerHTML = "";
@@ -225,7 +230,7 @@ $(document).ready(function () {
 
                                 label.innerHTML = colorList[item] + " h  ";
                                 box.className = "circle";
-                                var size = Math.log10(colorList[item] + 1) * 13;
+                                var size = Math.log10(colorList[item] + 1) * 10;
                                 box.style.height = size + "px";
                                 box.style.width = size + "px";
                                 
@@ -384,7 +389,7 @@ $(document).ready(function () {
                        
 
                         document.getElementById("chart1-title-id").innerHTML = "<span><b>MicroArray Analysis</b></span></br><span>" + calculateDatasetStats(mydatasets, 0.5)+"</span>";
-                        
+                        console.log("microarray processing end time " + Date.now())
                     }
                     // create filter table
                     // $("#filter-bar").removeClass("hidden");
@@ -542,7 +547,7 @@ $(document).ready(function () {
 
                                 label.innerHTML = colorList[item] + " h  ";
                                 box.className = "circle";
-                                var size = Math.log10(colorList[item] + 1) * 13;
+                                var size = Math.log10(colorList[item] + 1) * 10;
                                 box.style.height = size + "px";
                                 box.style.width = size + "px";
                                 
@@ -730,6 +735,9 @@ $(document).ready(function () {
                         $("#dashline2").html('<div id="dashline"><hr style="border: 1px dashed black;" /></div>')
                         
                         showPage();
+                        var end_time = Date.now();
+                        var delta_time = (end_time-start_time)/1000;
+                        console.log('total time ' + delta_time + ' s')
                 } 
                 }).fail(
                 function () {
