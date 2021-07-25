@@ -24,7 +24,9 @@ $(document).ready(function () {
         $('#fname').html('GREB1');
     });
 
-    
+    function process_local_result (raw_data) {
+        return raw_data;
+    }
 
     var mydatasets = [];
     // ===================== Submit ===============
@@ -50,7 +52,10 @@ $(document).ready(function () {
                 console.log("Network response " + (Date.now() - start_time)/1000 + " s")
                 document.getElementById("processtip").innerHTML = "";
                 window.click_once = true;
-                
+
+                console.log(processResult);
+                console.log("=============")
+                processResult = process_local_result(processResult);
                 // $('#myChart').html("<canvas id='myChart'></canvas>")
                 console.log(processResult);
                 // for microArray
