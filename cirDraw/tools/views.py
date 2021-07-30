@@ -65,44 +65,6 @@ def search_indb(request):
     
     # search for the database to get this form of data
 
-    
-
-    # data = {'a': [{
-    #                 'logfc': 5,
-    #                 'logp': 4,
-    #                 'name': 'gene1',
-    #                 'duration': 0.9,
-    #             },{
-    #                 'logfc': 6,
-    #                 'logp': 7,
-    #                 'name': 'gene2',
-    #                 'duration': 0.3,
-    #             },],
-    #             'b': [{
-    #                 'logfc': 10,
-    #                 'logp': 13,
-    #                 'name': 'gene1',
-    #                 'duration': 0.5,
-    #             },],
-    #             'c': [{
-    #                 'logfc': 12,
-    #                 'logp': 14,
-    #                 'name': 'gene1',
-    #                 'duration': 0.5,
-    #             },],
-    #             'd': [{
-    #                 'logfc': 11,
-    #                 'logp': 16,
-    #                 'name': 'gene1',
-    #                 'duration': 0.5,
-    #             },],
-    #             'f': [{
-    #                 'logfc': 10,
-    #                 'logp': 18,
-    #                 'name': 'gene1',
-    #                 'duration': 0.5,
-    #             },]
-    #     }
 
     gene_name = request.GET['gene_name']
     print(f"gene_name {gene_name}")

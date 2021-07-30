@@ -3,13 +3,13 @@
 {% load static %}
 
 {% block content %}
-<div id="search-container" class="container" style="padding-top: 55px;">
 
+<div id="search-container" class="container" style="padding-top: 55px;">
   <div id="uploadarea" class="center horizon">
-    
+
     <form id="fileform" action="/search/">
       {% csrf_token %}
-      <label for="fname">Gene name:</label>
+      <label for="fname">Enter Gene name:</label>
       <input type="text" id="fname" class="hint" name="fname" value="GREB1"  
           onfocus="if (this.className=='hint') { this.className = ''; this.value = 'GREB1'; }"
           onblur="if (this.value == '') { this.className = 'hint'; this.value = 'GREB1'; }">
@@ -128,8 +128,19 @@
     <div id="duration_container_rna"></div>
     <div id="legend_container_rna"></div>
     <div id="legend_stats_rna"></div>
-   
-    
+  </div>
+
+
+  <div id="dashline3"></div>
+
+  <div id="figure3" class="horizon-flex-contain">
+    <div class="chart-container" style="position: relative; height:60vh; width:45vw">
+      <div id="chart3-title-id" style="text-align: center;"></div>
+      <canvas id="myChart_chipseq"></canvas> 
+    </div>
+    <div id="duration_container_chipseq"></div>
+    <div id="legend_container_chipseq"></div>
+    <div id="legend_stats_chipseq"></div>
   </div>
   
 </div>
