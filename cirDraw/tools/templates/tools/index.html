@@ -6,7 +6,7 @@
     <div class="container">
       <div class="intro-text">
         <div class="intro-lead-in">Visualization & Analysis</div>
-        <div class="intro-heading">BOOST YOUR E2 GENE RESEARCH</div>
+        <div class="intro-heading">BOOST YOUR ESTRO-GENE RESEARCH</div>
         <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="{% url 'tools' %}">Get Start!</a>
         <div id="scrolldowntip" class="center movedown">
         <a href="#services">
@@ -30,34 +30,36 @@
         <div class="row text-center">
             <div class="col-md-4">
             <span class="fa-stack fa-4x">
-                <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                <i class="fas fa-eye fa-stack-1x fa-inverse"></i>
+              <!-- <i class="fas fa-circle fa-stack-2x text-primary"></i> -->
+              <img class="main-page-icon fa-inverse" src="{% static 'base/img/microarray-icon.jpg' %}" width="100%">
+                <!-- <i class="fas fa-eye fa-stack-1x fa-inverse"></i> -->
             </span>
-            <h4 class="service-heading">Density Distribution</h4>
-            <p class="text-muted">Visualizing the circRNA distribution on chromosomes.</p>
-            <img class="manual-img" src="{% static 'base/img/density_nofilter.png' %}" width="70%">
+
+            <a style="color: black" href="{% url 'manual' %}"><h4 class="service-heading">MicroArray Analysis</h4></a>
+            <p class="text-muted">Up/down regulation analysis for gene of interests based on MircoArray Datasets</p>
+            <img class="manual-img" src="{% static 'base/img/microarray.png' %}" width="100%">
             </div>
             <div class="col-md-4">
             <span class="fa-stack fa-4x">
-                <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                <i class="fas fa-table fa-stack-1x fa-inverse"></i>
+              <img class="main-page-icon" src="{% static 'base/img/AZX1bcrSWu2wEwskyDFh_2000px-DNA_sequence.svg.png' %}" width="100%">
             </span>
-            <h4 class="service-heading">Annotations</h4>
-            <p class="text-muted">circRNA internal structure, possible modifications and diseases.</p>
-            <img class="manual-img" src="{% static 'base/img/isoformplot_ttn_m6A.png' %}" width="70%">
+
+            <a style="color: black" href="{% url 'manual' %}"><h4 class="service-heading">RNA-seq Analysis</h4></a>
+            <p class="text-muted">Up/down regulation analysis for gene of interests based on RNA-seq Datasets</p>
+            <img class="manual-img" src="{% static 'base/img/RNAseq.png' %}" height="157px", width="100%">
             </div>
             <div class="col-md-4">
             <span class="fa-stack fa-4x">
-                <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                <i class="fab fa-python fa-stack-1x fa-inverse"></i>
+              <img class="main-page-icon" src="{% static 'base/img/chipseq.jpg' %}" width="200%">
             </span>
-            <a style="color: black" href="{% url 'download' %}"><h4 class="service-heading">Python Packages</h4></a>
-            <p class="text-muted">Python Package for local visualization.</p>
-            <p class="text-muted">Terminal Upload Interface for circDraw.</p>
-            <img class="manual-img" src="{% static 'base/img/hsa_circ_0001.png' %}" width="70%">
+            <a style="color: black" href="{% url 'manual' %}"><h4 class="service-heading">Chip-seq Analysis</h4></a>
+            <p class="text-muted">Up/down regulation analysis for gene of interests based on Chip-seq Datasets</p>
+            <img class="manual-img" src="{% static 'base/img/RNAseq.png' %}" height="157px", width="100%">
             </div>
         </div>
         </div>
+        <div class="get-start-2"><a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="{% url 'tools' %}">Get Start!</a></div>
+        
     </section>
   {% endblock %}
 

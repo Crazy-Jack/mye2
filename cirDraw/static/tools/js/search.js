@@ -1,6 +1,5 @@
 // import calculateDatasetStats from '/static/tools/js/select.js';
 
-
 $(document).ready(function () {
     window.click_once = false;
     
@@ -38,9 +37,7 @@ $(document).ready(function () {
         // console.log($('#fname').val());
         
         document.getElementById("processtip").innerHTML = "<span class='ld ld-ring ld-spin'></span>"
-            
-            
-            
+
             var gene_name = $('#fname').val();
             if (window.click_once) {
                 resetPage();
