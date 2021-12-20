@@ -9,7 +9,7 @@
 
     <form id="fileform" action="/search/">
       {% csrf_token %}
-      <label for="fname">Enter Gene name:</label>
+      <label for="fname">Enter Gene name: </label>
       <input type="text" id="fname" class="hint" name="fname" value="GREB1"  
           onfocus="if (this.className=='hint') { this.className = ''; this.value = 'GREB1'; }"
           onblur="if (this.value == '') { this.className = 'hint'; this.value = 'GREB1'; }">
@@ -55,7 +55,7 @@
           <li id="ss_elem_Og" role="option">Oganesson</li>
         </ul>
       </div>
-      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 200px;">&nbsp;</div>
+      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 25vh;">&nbsp;</div>
       <div style="font-size:30px; padding:15px; ">&nbsp;</div>
       <div>
         <span>Duration:</span>
@@ -74,7 +74,7 @@
         </ul>
       </div>
 
-      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 200px;">&nbsp;</div>
+      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 25vh;">&nbsp;</div>
       <div style="font-size:30px; padding:15px; ">&nbsp;</div>
       <div>
         <span>Dose:</span>
@@ -85,7 +85,7 @@
         </ul>
       </div>
 
-      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 200px;">&nbsp;</div>
+      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 25vh;">&nbsp;</div>
       <div style="font-size:30px; padding:15px; ">&nbsp;</div>
       <div>
         <span>Adjusted p-value (<)</span>
@@ -104,16 +104,32 @@
   
   <div><p id="aftersubmit1"></p></div>
   <div><p id="aftersubmit2"></p></div>
+  <div><p id="aftersubmit3"></p></div>
   <!-- <div id="dashline1"></div> -->
   <div id="figure1" class="horizon-flex-contain">
     
-      <div class="chart-container" style="position: relative; height:60vh; width:45vw">
+      <div class="chart-container">
         <div id="chart1-title-id" style="text-align: center;"></div>
         <canvas id="myChart"></canvas> 
+        <a id="download1"
+          href=""
+          class="btn btn-primary float-right bg-flat-color-1"
+          title="Descargar Gráfico">
+
+                  <!-- Download Icon -->
+          <i class="fa fa-download"></i>
+        </a>
       </div>
-      <div id="duration_container"></div>
-      <div id="legend_container"></div>
-      <div id="legend_stats"></div>
+
+      <div>
+        <div style="height: 5vh;"></div>
+        <div style="display: flex; ">
+          <div id="duration_container"></div>
+          <div id="legend_container"></div>
+          <div id="legend_stats"></div>
+        </div>
+      </div>
+      
     
     
   </div>
@@ -121,27 +137,99 @@
   <div id="dashline2"></div>
 
   <div id="figure2" class="horizon-flex-contain">
-    <div class="chart-container" style="position: relative; height:60vh; width:45vw">
+    <div class="chart-container">
       <div id="chart2-title-id" style="text-align: center;"></div>
       <canvas id="myChart_rna"></canvas> 
+      <a id="download2"
+          href=""
+          class="btn btn-primary float-right bg-flat-color-1"
+          title="Descargar Gráfico">
+
+                  <!-- Download Icon -->
+          <i class="fa fa-download"></i>
+        </a>
     </div>
-    <div id="duration_container_rna"></div>
-    <div id="legend_container_rna"></div>
-    <div id="legend_stats_rna"></div>
+
+    <div> 
+      <div style="height: 5vh;"></div>
+      <div style="display: flex" style="height:55vh;">
+        <div id="duration_container_rna"></div>
+        <div id="legend_container_rna"></div>
+        <div id="legend_stats_rna"></div>
+      </div>
+      <div style="height: 2vh;"></div>
+    </div>
+    
   </div>
 
 
   <div id="dashline3"></div>
 
   <div id="figure3" class="horizon-flex-contain">
-    <div class="chart-container" style="position: relative; height:60vh; width:45vw">
-      <div id="chart3-title-id" style="text-align: center;"></div>
-      <canvas id="myChart_chipseq"></canvas> 
+    <div id="chart-container3" class="chart-container" style="position: relative; height:80vh; width:45vw">
+      <div id="chart3-title-id" style="text-align: center; width: 45vw"></div>
+  
+      <div style="display: flex">
+        <!-- <div style="width: 6px;"></div> -->
+        <div style="height: 15vh; width:43vw">
+          <canvas id="myChart_chipseq_distribution"></canvas> 
+        </div>
+      </div>
+      
+      
+      <div id="chipseq-big" style="display: flex">
+        <!-- <div style="width: 6px;"></div> -->
+        <div style="height: 44.5vh;width:45vw;">
+          <canvas id="myChart_chipseq"></canvas> 
+          <a id="download3"
+          href=""
+          class="btn btn-primary float-right bg-flat-color-1"
+          title="Descargar Gráfico">
+
+                  <!-- Download Icon -->
+          <i class="fa fa-download"></i>
+        </a>
+        </div>
+      </div>
+      
+      
     </div>
-    <div id="duration_container_chipseq"></div>
-    <div id="legend_container_chipseq"></div>
-    <div id="legend_stats_chipseq"></div>
+    <div style="width: 15vw;">
+      <div style="height: 5vh;"></div>
+      <div id="chipseq_legend_container" style="display: flex;">
+        <div id="duration_container_chipseq"></div>
+        <div style="width: 20vw;" id="legend_container_chipseq"></div>
+        <div style="width: 20vw;" id="legend_stats_chipseq"></div>
+      </div>
+
+      <div> 
+        <div style="display: flex">
+          <div style="width: 30vw"> </div>
+          <div id="boxplot_chipseq_canvas">
+            <div style="height: 1vh;"></div>
+            <canvas id="myChart_chipseq_datasetdetail"></canvas> 
+          </div>
+        </div>
+        <!-- <div style="height: 5%"></div> -->
+      </div>
+      <br><br>
+      
+      
+      
+    </div>
+    
   </div>
+  <div id="dashline4"></div>
+  <div id='inlineFrameExample-id'>
+    <iframe id="inlineFrameExample"
+    title="Inline Frame Example"
+    width="1200"
+    height="800"
+    style="display:block;"
+    src="https://epigenomegateway.wustl.edu/">
+    </iframe>
+  </div>
+  
   
 </div>
 
@@ -158,7 +246,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js" integrity="sha256-cs4thShDfjkqFGk5s2Lxj35sgSRr4MRcyccmi0WKqCM=" crossorigin="anonymous"></script>
 -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+<script src="https://unpkg.com/@sgratzl/chartjs-chart-boxplot@3"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-box-and-violin-plot@2.4.0/build/Chart.BoxPlot.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <script src="{% static 'tools/js/search.js' %}"></script>
 <script src="{% static 'tools/js/select.js' %}"></script>
 <script src="{% static 'tools/js/tipso.js' %}"></script>
+<script type="text/javascript"> 
+  function decodeHtml(html) {
+      var txt = document.createElement("textarea");
+      txt.innerHTML = html;
+      return txt.value;
+  }
+  var preload = decodeHtml("{{preload}}");
+</script>
 {% endblock %}

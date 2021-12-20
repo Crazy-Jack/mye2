@@ -7,6 +7,7 @@ urlpatterns = [
 
     # Render pages
     url(r'^$', views.render_search_page, name='tools'),
+    url(r'^stats/$', views.render_stats_page, name='tools_stats'),
     url(r'^display/(?P<md5>[0-9a-f-]+)$', views.render_display_page, name="render_display"),
 
     # Upload
@@ -14,6 +15,8 @@ urlpatterns = [
     url(r'^search/$', views.search_indb, name='search_indb'),
     url(r'^run/$', views.run_call, name='run'),
 
+    # check statistics
+    url(r'^get_stats/$', views.get_stats, name='get_stats'),
 
     # Check Status
     url(r'^statusfile/$', views.check_status),

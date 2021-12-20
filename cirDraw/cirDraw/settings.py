@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'zaa7(53a2vvo)41!#xf-n$_p+np1znjqq67*g!27s(vy465pw4'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -88,9 +88,9 @@ DATABASES = {
         # 'ENGINE': 'dj_db_conn_pool.backends.mysql',
         'NAME': 'e2database',
         'USER': 'root',
-        'PASSWORD': 'mypassword',
-        #'HOST': '167.179.90.87',
-        'HOST': '127.0.0.1',
+        'PASSWORD': os.environ['mysql_password'],
+        # 'HOST': '127.0.0.1',
+        'HOST': 'estrogene.org',
         'PORT': 3306,
         'POOL_OPTIONS': {
             'POOL_SIZE': 50,

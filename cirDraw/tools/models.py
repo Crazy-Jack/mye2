@@ -215,9 +215,9 @@ class SearchTableRNAseq(models.Model):
     p_value = models.FloatField(null=True, db_column='pvalue')
     padj = models.FloatField(null=True, db_column='padj')
     
-    ensembl = models.CharField(max_length=255, db_column='ensembl')
+    ensembl = models.CharField(max_length=255, db_column='ensembl', default="")
     entrezgene_id = models.IntegerField(db_column='entrezgene_id', default="")
-    GeneName = models.CharField(max_length=255, db_column='GeneName')
+    GeneName = models.CharField(max_length=255, db_column='GeneName', default="")
 
     CellLine = models.CharField(max_length=255, db_column='CellLine', default="")
     GSE = models.CharField(max_length=255, db_column='GSE', default="")
@@ -231,6 +231,39 @@ class SearchTableRNAseq(models.Model):
 
     class Meta:
         db_table = 'RNAseqData'
+
+
+class SearchTableChipSeq(models.Model):
+    """RNAseq table"""
+    chr_num = models.CharField(max_length=255, db_column='chr', default="")
+    start = models.IntegerField(db_column='start', null=True)
+    end = models.IntegerField(db_column='end', null=True)
+    peakid = models.CharField(max_length=255, db_column='peakid', default="")
+    mid = models.IntegerField(db_column='mid', null=True)
+    score = models.FloatField(null=True, db_column='score')
+    GSE = models.CharField(max_length=255, db_column='GSE', default="")
+    Cellline = models.CharField(max_length=255, db_column='Cellline', default="")
+    Duration = models.CharField(max_length=255, db_column='Duration', default="")
+    Dose = models.FloatField(null=True, db_column='Dose')
+
+    class Meta:
+        db_table = 'ChipSeqData'
+
+
+class SearchTableChipSeqRefData(models.Model):
+    """RNAseq table"""
+    chr_num = models.CharField(max_length=255, db_column='chr', default="")
+    tss = models.IntegerField(db_column='tss', null=True)
+    tss_s = models.IntegerField(db_column='tss_s', null=True)
+    tss_e = models.IntegerField(db_column='tss_e', null=True)
+    generef = models.CharField(max_length=255, db_column='generef', default="")
+    gene = models.CharField(max_length=255, db_column='gene', default="")
+    strand = models.CharField(max_length=255, db_column='strand', default="")
+
+    class Meta:
+        db_table = 'ChipseqReference'
+
+
 
 ######## END of TABLE UPDATE ########
 # class ToolsChromosome(models.Model):

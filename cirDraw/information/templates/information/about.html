@@ -1,63 +1,82 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 <!-- About -->
 <section id="about">
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
-            <h2 class="section-heading text-uppercase" tag="citation">Contact Us</h2>
-            <h3 class="section-subheading text-muted" style="margin-bottom: 35px;">The introduction of the authors and citation</h3>
-            <h4>Authors</h4>
+            <!-- <h2 class="section-heading text-uppercase" tag="citation">About Us</h2> -->
+
+            <h2 class="section-heading text-uppercase" style="color: black; margin-bottom: 2em;"><a href="https://leeoesterreich.org/" target="_blank">
+              <span style="color: black;">About Us</span></a></h2>
+            <h4>Principle Investigators:</h4>
+            <br>
+            <div style="display: flex; text-align: center;">
+              <div>
+                <img src="{% static 'base/img/AdrianLee.jpeg' %}" width="150px">
+                <a href="https://leeoesterreich.org/adrian-lee-ph-d" target="_blank" style="color: black;"><p>Adrian Lee, Ph.D</p></a>
+              </div>
+              <div style="width:10vw"></div>
+
+              <div>
+                <img src="{% static 'base/img/SteffiOesterreich.jpeg' %}" width="150px">
+                <a href="https://leeoesterreich.org/steffi-oesterreich-ph-d" target="_blank" style="color: black;"><p>Steffi Oesterreich, PhD</p></a>
+              </div>
+            </div>
+            <br>
+            <h4>Active Team Member</h4><br>
+            <div style="display: flex; text-align: center;">
+              <div>
+                <img src="{% static 'base/img/tianqinli.png' %}" width="150px">
+                <a href="https://www.linkedin.com/in/tianqin-li-b16299170/" target="_blank" style="color: black;"><p>Tianqin Li</p></a>
+              </div>
+              <div style="width:11vw"></div>
+              <div>
+                <img src="{% static 'base/img/zheqili.jpg' %}" width="150px">
+                <a href="https://leeoesterreich.org/zheqi-vaciry-li" target="_blank" style="color: black;"><p>Zheqi Li, PhD</p></a>
+              </div>
+              <div style="width:11vw"></div>
+              <div>
+                <img src="{% static 'base/img/MeganYates.jpeg' %}" width="150px">
+                <a href="https://leeoesterreich.org/megan-yates" target="_blank" style="color: black;"><p>Megan Yates</p></a>
+              </div>
+            </div><br>
             
-            <h4>PI</h4>
-            <p> </p>
-            <h4>Citation</h4>
-
-          </div>
-        </div>
-      </div>
-      <br><br><br><br><br><br><br><br>
-
-    
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <h2 class="section-heading text-uppercase" tag="citation">License</h2>
-            <!-- <h3 class="section-subheading text-muted" style="margin-bottom: 35px;">The introduction of the authors and citation</h3> -->
-            <p>Data used in this project is under ?? LICENSE. The service of EstroGeneDB is under MIT Lisence:</p>
-            <div>Copyright <YEAR> <COPYRIGHT HOLDER>
-
-              Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-              <br><br>
-                <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-                <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-              <br><br>
+            <h4>Consulting Board</h4><br>
+            <div style="display: flex; text-align: center;">
+              <div>
+                <img src="{% static 'base/img/JasonCarroll.png' %}" width="150px" height="150px">
+                <a href="http://www.carroll-lab.org.uk/" target="_blank" style="color: black;"><p>Jason Carroll PhD</p></a>
               </div>
-          </div>
-        </div>
-      </div>
-    
-
-      <br><br><br><br>
-    
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <h2 class="section-heading text-uppercase" tag="citation">Fundings</h2>
-            <!-- <h3 class="section-subheading text-muted" style="margin-bottom: 35px;">The introduction of the authors and citation</h3> -->
-            <p>Data used in this project is under ?? LICENSE. The service of EstroGeneDB is under MIT Lisence:</p>
-            <div>Copyright <YEAR> <COPYRIGHT HOLDER>
-
-              Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-              <br><br>
-                <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-                <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-              <br><br>
+              <div style="width:11vw"></div>
+              <div>
+                <img src="{% static 'base/img/MatthewSikora.png' %}" width="150px">
+                <a href="https://www.sikoralab.com/" target="_blank" style="color: black;"><p>Matthew Sikora PhD</p></a>
               </div>
+              <div style="width:11vw"></div>
+              <div>
+                <img src="{% static 'base/img/GeorgeTseng.png' %}" width="150px">
+                <a href="https://sites.pitt.edu/~ctseng/" target="_blank" style="color: black;"><p>George Tseng, ScD</p></a>
+              </div>
+            </div>
+            <br>
+            <h4>Previous Team members</h4><br>
+            <ul>
+              <li>Yang Wu</li>
+              <li>Lyuqin Chen, PhD</li>
+              <li>Dorothy Carter</li>
+              <li>Amanda Ferber</li>
+            </ul>
+            
+
           </div>
         </div>
       </div>
+      
+    
+    
+      
     </section>
 
     

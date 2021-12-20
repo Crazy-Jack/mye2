@@ -203,7 +203,7 @@ background: url('../../../media/close.png') no-repeat center center;
   /* border: 10px; */
   height: 30px;
   padding: 1px;
-  width: 70px;
+  width: 80px;
   display: flex;
 }
 
@@ -213,7 +213,7 @@ background: url('../../../media/close.png') no-repeat center center;
   /* border: 10px; */
   height: 30px;
   padding: 1px;
-  width: 120px;
+  width: 130px;
   display: flex;
 }
 
@@ -233,13 +233,15 @@ background: url('../../../media/close.png') no-repeat center center;
 }
 
 .horizon-flex-contain {
-  height: 100%;
-  width: 100%;
+  width: 155vw;
+  height: auto;
   display: flex;
 }
 
 .chart-container {
   padding: 10px;
+  height: 40vh; 
+  width: 44vw;
 }
 
 .circle {
@@ -249,15 +251,25 @@ background: url('../../../media/close.png') no-repeat center center;
   border-radius: 50%;
 }
 
+.circle-nosolid {
+  height: 25px;
+  width: 25px;
+  background-color: white;
+  border-radius: 50%;
+  border:1px solid black;    
+}
+
 .circle-contain {
   height: 25px;
   width: 30px;
   display: flex;
   align-items: center;
 }
+
+
 .label-contain {
   height: 25px;
-  width: 50px;
+  width: 53px;
   display: flex;
   align-items: center;
 }

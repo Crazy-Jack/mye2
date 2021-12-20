@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div id="search-container" class="container" style="padding-top: 55px;">
+  <div id="uploadarea" class="center horizon">
+
+    <form id="fileform" action="/search/">
+      {% csrf_token %}
+      <label for="fname">Enter Up Regulate Percetage: </label>
+      <input type="text" id="fname" class="hint" name="fname" value="GREB1"  
+          onfocus="if (this.className=='hint') { this.className = ''; this.value = 'GREB1'; }"
+          onblur="if (this.value == '') { this.className = 'hint'; this.value = 'GREB1'; }">
+      <input type="submit" id="submit" value="Search">
+      <!-- <a id="refresher" href='/tools/'><i class="fas fa-redo-alt ml-1"></i></a> -->
+    </form>
+    <div id="processtip" style="margin-left: 10px; margin-top: 7px;"></div>
+  </div>
+
+  <!-- <span class="demo" title="hello" data-tipso="I'm a tooltip">Hover me</span> -->
+<div id="myfilterbox" class="listbox-area">
+  <div>
+    <span id="ss_elem" class="listbox-label"><b>Select Criterion:</b></span>
+    <div style="display:flex;">
+      <div>
+        <span>Cell Line:</span>
+        <ul class="ss_elem_list" id="ss_elem_list1" tabindex="0" role="listbox" aria-labelledby="ss_elem"> 
+          <li id="ss_elem_MCF7" role="option">MCF7</li>
+          <li id="ss_elem_MM231" role="option">MM231</li>
+          <li id="ss_elem_SKBR3" role="option">SKBR3</li>
+          <li id="ss_elem_T47D" role="option">T47D</li>
+          <li id="ss_elem_BT474" role="option">BT474</li>
+          <li id="ss_elem_SUM52PE" role="option">SUM52PE</li>
+          <li id="ss_elem_ZR75" role="option">ZR75-1</li>
+          <li id="ss_elem_MM134" role="option">MM134</li>
+          <li id="ss_elem_SUM44" role="option">SUM44</li>
+          <li id="ss_elem_BT20" role="option">BT20</li>
+          <li id="ss_elem_BT483" role="option">BT483</li>
+          <li id="ss_elem_CAMA1" role="option">CAMA1</li>
+          <li id="ss_elem_HCC1428" role="option">HCC1428</li>
+          <li id="ss_elem_MM157" role="option">MM157</li>
+          <li id="ss_elem_MM175" role="option">MM175</li>
+          <li id="ss_elem_MM361" role="option">MM361</li>
+          <li id="ss_elem_MM415" role="option">MM415</li>
+        </ul>
+      </div>
+      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 35vh;">&nbsp;</div>
+      <div style="font-size:30px; padding:15px; ">&nbsp;</div>
+      <div>
+        <span>Duration:</span>
+        <ul class="ss_elem_list" id="ss_elem_list2" tabindex="0" role="listbox" aria-labelledby="ss_elem"> 
+          <li id="ss_elem_2_1" role="option">1 hour</li>
+          <li id="ss_elem_2_2" role="option">2 hour</li>
+          <li id="ss_elem_2_3" role="option">3 hour</li>
+          <li id="ss_elem_2_4" role="option">4 hour</li>
+          <li id="ss_elem_2_5" role="option">6 hour</li>
+          <li id="ss_elem_2_6" role="option">8 hour</li>
+          <li id="ss_elem_2_7" role="option">12 hour</li>
+          <li id="ss_elem_2_8" role="option">16 hour</li>
+          <li id="ss_elem_2_9" role="option">18 hour</li>
+          <li id="ss_elem_2_10" role="option">24 hour</li>
+          <li id="ss_elem_2_11" role="option">48 hour</li>
+        </ul>
+      </div>
+
+      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 35vh;">&nbsp;</div>
+      <div style="font-size:30px; padding:15px; ">&nbsp;</div>
+      <div>
+        <span>Dose:</span>
+        <ul class="ss_elem_list" id="ss_elem_list3" tabindex="0" role="listbox" aria-labelledby="ss_elem"> 
+          <li id="ss_elem_3_1" role="option">1 nM</li>
+          <li id="ss_elem_3_2" role="option">10 nM</li>
+          <li id="ss_elem_3_3" role="option">1000 nM</li>
+        </ul>
+      </div>
+
+      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 35vh;">&nbsp;</div>
+      <div style="font-size:30px; padding:15px; ">&nbsp;</div>
+      <div>
+        <span>Adjusted p-value (<)</span>
+        <ul class="ss_elem_list" id="ss_elem_list4" tabindex="0" role="listbox" aria-labelledby="ss_elem"> 
+          <li id="ss_elem_4_1" role="option">0.05</li>
+          <li id="ss_elem_4_2" role="option">0.1</li>
+          <li id="ss_elem_4_3" role="option">ALL</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+  <!-- <p id="aftersubmit"></p> -->
+  
+
+</div>
+
+
+
+<!-- Upload -->
+{% endblock %}
+
+{% block otherJS %}
+<!--
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" integrity="sha256-e47xOkXs1JXFbjjpoRr1/LhVcqSzRmGmPqsrUQeVs+g=" crossorigin="anonymous" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js" integrity="sha256-cs4thShDfjkqFGk5s2Lxj35sgSRr4MRcyccmi0WKqCM=" crossorigin="anonymous"></script>
+-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+<script src="https://unpkg.com/@sgratzl/chartjs-chart-boxplot@3"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-box-and-violin-plot@2.4.0/build/Chart.BoxPlot.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<script src="{% static 'tools/js/stats.js' %}"></script>
+<script src="{% static 'tools/js/select.js' %}"></script>
+<script src="{% static 'tools/js/tipso.js' %}"></script>
+<script type="text/javascript"> 
+  function decodeHtml(html) {
+      var txt = document.createElement("textarea");
+      txt.innerHTML = html;
+      return txt.value;
+  }
+  var preload = decodeHtml("{{preload}}");
+</script>
+{% endblock %}

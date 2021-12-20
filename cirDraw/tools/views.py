@@ -18,6 +18,7 @@ import hashlib
 import csv
 import numpy as np
 import re
+import pickle
 
 # ========================= RENDER PAGES ==============================
 def render_index_page(request):
@@ -31,8 +32,21 @@ def render_upload_page(request):
 
 def render_search_page(request):
     """test_render_search_page"""
-    context = {}
+    # preload data
+    with open("/home/tianqinl/mye2/cirDraw/tools/cache.pkl", 'rb') as f:
+         all_out_data = pickle.load(f)
+    all_out_data_json = json.dumps(all_out_data)
+    context = {'preload': all_out_data_json}
     return render(request, 'tools/search.html', context)
+
+def render_stats_page(request):
+    """test_render_search_page"""
+    # preload data
+    # with open("/home/tianqinl/mye2/cirDraw/tools/cache.pkl", 'rb') as f:
+    #      all_out_data = pickle.load(f)
+    # all_out_data_json = json.dumps(all_out_data)
+    context = {}
+    return render(request, 'tools/stats.html', context)
 
 
 
@@ -55,6 +69,17 @@ def render_display_page(request, md5):
         print('This md5 not exist.')
         return render(request, 'tools/HTTP404.html', context)
         #raise Http404
+
+
+# ====================================================================
+
+@csrf_exempt
+def get_stats(request):
+    gene_name = request.GET['gene_name']
+    print(gene_name)
+    print("hellp")
+    return JsonResponse({'gene': gene_name}, safe=False)
+
 
 
 # ====================================================================
@@ -153,10 +178,53 @@ def search_indb(request):
 
     all_out_data.append(stats_1)
     all_out_data.append(stats_2)
-    end_time = time.time()
 
+
+    # chipseq
+    start_chipseq = time.time()
+    gene_info = SearchTableChipSeqRefData.objects.filter(gene__exact = gene_name)
+    chr_num = gene_info[0].chr_num
+    tss = np.mean([i.tss for i in gene_info])
+    up_tss = max(0, tss - 200000)
+    down_tss = tss + 200000
+    data_chip = SearchTableChipSeq.objects.filter(chr_num__exact = chr_num).filter(mid__gt = up_tss).filter(mid__lt=down_tss)
+    print([i.score for  i in data_chip])
+    print(f"chipseq time is {time.time() - start_chipseq}")
+    end_time = time.time()
+    out_data = {}
+    for data_i in data_chip:
+        mid = data_i.mid
+        score = data_i.score # ???
+        CellLine = data_i.Cellline.replace(" ", "")
+        Dose = data_i.Dose
+        Duration = data_i.Duration.replace(" ", "").replace(",", "-")
+        GSE = data_i.GSE
+        
+        # print(f"data_i.filename {data_i.filename} out {out_name}: hour: {hours}; dose {dose}")
+        # create object to append
+
+        duration, multi_duration = convert_RNAseq_hour_radius(Duration)
+
+
+        obj = {"log2score": np.log2(float(score)),
+                "tss": (mid - tss)/1000,
+                "name": CellLine,
+                "duration": duration,
+                "multi_duration": multi_duration,
+                "dose": Dose,
+                "GSE": GSE,
+            }
+        if CellLine not in out_data:
+            out_data[CellLine] = [obj]
+        else:
+            out_data[CellLine].append(obj)
+    all_out_data.append(out_data)
     total_time = end_time - start_time
     print(f"Total time {total_time} s")
+    # save data
+
+    # with open("/home/tianqinl/mye2/cirDraw/tools/cache.pkl", 'wb') as f:
+    #     pickle.dump(all_out_data, f)
     return JsonResponse(all_out_data, safe=False)
 
 
@@ -183,11 +251,6 @@ def calculate_statistics(out_data, threshold_fc):
         stats[i] = stats_i
     print(f"stats {stats}")
     return stats
-
-        
-
-        
-
 
 
 def convert_RNAseq_hour_radius(hours):

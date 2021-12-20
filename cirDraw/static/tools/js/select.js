@@ -615,11 +615,13 @@ function getaria() {
         var base_title = 'MicroArray Analysis ';
         var chart_title_id = 'chart1-title-id';
         var fold_change_threshold = 0.5;
-      } else {
+      } else if (instance.canvas.id == 'myChart_rna') {
         var raw_datasets = window.mydatasets_rna;
         var base_title = 'RNA-seq Analysis ';
         var chart_title_id = 'chart2-title-id';
         var fold_change_threshold = 2;
+      } else {
+        return;
       }
       
       

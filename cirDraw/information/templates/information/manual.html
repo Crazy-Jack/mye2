@@ -14,29 +14,75 @@
             <p>EstroGeneDB supports analysis regarding to 3 types of data: MicroArray, RNA-seq, and Chip-seq Data. Click the <a style="color:blue" href="/tools/" target="_blank">SEARCH</a> button on the top bar to enter the search page.</p>
         </br>
             <div align="middle"><img class="manual-img" src="{% static 'base/img/search.png' %}" width="70%"></div>
-        </br>
+        </br><br>
             <p>Enter the gene of interest into the search box, hit the search button on the right to start automatic query in our precomputed database.</p>
             <hr>
             <h4>MicroArray analysis</h4>
             </br>
-            <div align="middle"><img class="manual-img" src="{% static 'base/img/microdemo.png' %}" width="70%"></div>
+            <div align="middle"><img class="manual-img" src="{% static 'base/img/micro-filterbar.png' %}" width="70%"></div>
             </br>  
         By default, we display results from all cellines and all experimental conditions. You can apply filters to dynamically costomize your search results.
         </br>
-        <div align="middle"><img class="manual-img" src="{% static 'base/img/micro-demo2-filter.png' %}" width="70%"></div>
+        <div align="middle"><img class="manual-img" src="{% static 'base/img/micro-filtered-bar.png' %}" width="70%"></div>
         </br>
         <hr>
         <h4>RNA-seq analysis</h4>
         In addition to MicroArray data, we also conducted analysis on RNA-seq data and provide the corresponding results under MicroArray Section. The filter applies for both RNA-seq and MicroArray data.
         </br>
-        <div align="middle"><img class="manual-img" src="{% static 'base/img/rnademo.png' %}" width="70%"></div>
+        <br>
+        <div align="middle"><img class="manual-img" src="{% static 'base/img/greb1-rnaseq.png' %}" width="70%"></div>
         </br>
             <hr>
-
+            <h4>Chip-Seq analysis</h4>
+            <p>Chip-Seq data analysis is also provided in the form of TSS binding sites against its peak calling scores. The dot plot represents the combination of all ER binding sites at the -/+ 200 kb regions around the TSS of the GOF (from either CSS+E2 or full medium groups). Cell lines and conditions are specified. The green histogram summarizes the number of ER binding sites within each 10kb region. We also provided the binding sites quantification of each data set shown as a box plot.</p>
+            </br>
+            <br>
+            <div align="middle"><img class="manual-img" src="{% static 'base/img/greb1-chipseq.png' %}" width="70%"></div>
+            </br>
         <ur style="text-indent:50px">
+        </div>
 
         </div>
-        </div>
+        <br>
+        <hr>
+        <h3>Examples</h3>
+        <ul>
+            <li>Positive Control Gene: <b>GREB1</b></li>
+            <br>
+
+            <div align="middle"><img class="manual-img" src="{% static 'base/img/greb1-micro.png' %}" width="70%"></div>
+
+            <br>
+
+            <div align="middle"><img class="manual-img" src="{% static 'base/img/greb1-rnaseq.png' %}" width="70%"></div>
+            <br>
+
+            <div align="middle"><img class="manual-img" src="{% static 'base/img/greb1-chipseq.png' %}" width="70%"></div>
+
+            <br>
+            <hr>
+            <br>
+
+
+            <li>Negative Control Gene: <b>ACTB</b></li>
+            <br>
+
+            <div align="middle"><img class="manual-img" src="{% static 'base/img/actb-micro.png' %}" width="70%"></div>
+
+            <br>
+
+            <div align="middle"><img class="manual-img" src="{% static 'base/img/actb-rnaseq.png' %}" width="70%"></div>
+            <br>
+
+            <div align="middle"><img class="manual-img" src="{% static 'base/img/actb-chipseq.png' %}" width="70%"></div>
+
+            <br>
+            <hr>
+            <br>
+            
+        </ul>
+
+
         <h3>More Information</h3>
         <hr>
         <p>You can refer to <a href="https://github.com/">github page</a> for detail instructions. Or <a href="{% url 'about' %}">Contact</a> us if you have any questions regarding EstroGeneDB usage.</p>
