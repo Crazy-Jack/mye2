@@ -6,13 +6,26 @@ $(document).ready(function () {
         e.preventDefault();
         $('#fname1').html('GREB1');
     });
-    $('tr.header').nextUntil('tr.header').slideToggle(100);
-    $('tr.header').click(function(){
-        $(this).find('span').text(function(_, value){return value=='-'?'+':'-'});
-        $(this).nextUntil('tr.header').slideToggle(100, function(){
-        });
-    });
+    
 
+    function createDownloadLink(anchorSelector, str, fileName){
+        if(window.navigator.msSaveOrOpenBlob) {
+            var fileData = [str];
+            blobObject = new Blob(fileData);
+            $(anchorSelector).click(function(){
+                window.navigator.msSaveOrOpenBlob(blobObject, fileName);
+            });
+        } else {
+            var url = "data:text/plain;charset=utf-8," + encodeURIComponent(str);
+            $(anchorSelector).attr("download", fileName);               
+            $(anchorSelector).attr("href", url);
+        }
+    }
+
+    $(function () {
+        var str = "hi,file";
+        createDownloadLink("#export",str,"file.txt");
+    });
 
     $('#submit1').click(function (e) {
         e.preventDefault();
@@ -141,11 +154,12 @@ $(document).ready(function () {
         $(`#processtip${id_mode}`).html(`<div id='processtip${id_mode}' style='margin-left: 10px; margin-top: 7px;'></div>`)
         console.log(processResult)
 
+
         var microarray_response_num = processResult[0].length
         console.log("microarray_response_num " + microarray_response_num)
-        $(`#num_genes_${id_mode}`).html(`<div id="num_genes_${id_mode}" style="padding-bottom: 1em;">Got <u>${microarray_response_num}</u> Significant Genes for <b>MicroArray</b>:</div>`)
+        $(`#num_genes_${id_mode}`).html(`<div id="num_genes_${id_mode}" style="padding-bottom: 1em;">Got <u>${microarray_response_num}</u> Significant Genes for <b>MicroArray</b> <a id='export_${id_mode}' color="black" download="" href="#"><u><span style="color:red">(export)</u></span></a>:</div>`)
         // Convert to microarray data
-
+        var str_micro = "GeneName\tNumOfData\tSignifiLogFCPercent\tSignifiPvaluePercent\n"
         var microarray_table_html = `<table id="microarray_table_up_${id_mode}">
         <thead>
           <tr>
@@ -167,7 +181,7 @@ $(document).ready(function () {
             var ins_count = processResult[0][i].ins_count;
             var genename = processResult[0][i].genename;
             var logfc_percent =  processResult[0][i].logfc_percent
-            var padj_percent = Math.pow(10, -processResult[0][i].log10padj_percent)
+            var padj_percent = Math.pow(10, -processResult[0][i].log10padj_percent).toFixed(2);
 
             microarray_table_html += `
                 <tr>
@@ -177,6 +191,7 @@ $(document).ready(function () {
                     <td>${padj_percent}</td>
                 </tr>
             `
+            str_micro += `${genename}\t${ins_count}\t${logfc_percent}\t${padj_percent}\n`
         }
         microarray_table_html += `
                 </tbody>
@@ -184,6 +199,10 @@ $(document).ready(function () {
         `
         $(`#microarray_table_up_${id_mode}`).html(microarray_table_html)
         
+
+
+        // var str_rna = "hi,file";
+        // var str_micro = "hehehef\tfefe\nggjj\tgkkd\n"
         
 
 
@@ -191,7 +210,9 @@ $(document).ready(function () {
         // RNA-seq 
         var rna_response_num = processResult[1].length
         console.log("rna_response_num " + rna_response_num)
-        $(`#num_genes_${id_mode}_rna`).html(`<div id="num_genes_${id_mode}_rna" style="padding-bottom: 1em;">Got <u>${rna_response_num}</u> Significant Genes for <b>RNA-seq</b>:</div>`)
+        $(`#num_genes_${id_mode}_rna`).html(`<div id="num_genes_${id_mode}_rna" style="padding-bottom: 1em;">Got <u>${rna_response_num}</u> Significant Genes for <b>RNA-seq</b> <a id='export_${id_mode}_rna' download="" href="#"><u><span style="color:red">(export)</u></span></u></a>:</div>
+        `)
+        var str_rna = "GeneName\tNumOfData\tSignifiLogFCPercent\tSignifiPvaluePercent\n"
         var rnaseq_table_html = `<table id="rnaseq_table_up_${id_mode}">
         <thead>
           <tr>
@@ -213,7 +234,7 @@ $(document).ready(function () {
             var ins_count = processResult[1][i].ins_count;
             var genename = processResult[1][i].genename;
             var logfc_percent =  processResult[1][i].logfc_percent
-            var padj_percent = Math.pow(10, -processResult[1][i].log10padj_percent)
+            var padj_percent = Math.pow(10, -processResult[1][i].log10padj_percent).toFixed(2);
 
             rnaseq_table_html += `
                 <tr>
@@ -223,6 +244,7 @@ $(document).ready(function () {
                     <td>${padj_percent}</td>
                 </tr>
             `
+            str_rna += `${genename}\t${ins_count}\t${logfc_percent}\t${padj_percent}\n`
         }
         rnaseq_table_html += `
                 </tbody>
@@ -236,5 +258,10 @@ $(document).ready(function () {
             $(this).nextUntil(`tr.header${id_mode}`).slideToggle(100, function(){
             });
         });
+
+        // download 
+        
+        createDownloadLink(`#export_${id_mode}_rna`,str_rna,"RNA-seq-genelist.txt");
+        createDownloadLink(`#export_${id_mode}`,str_micro,"MicroArray-genelist.txt");
     }
 });
