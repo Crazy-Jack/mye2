@@ -1377,6 +1377,7 @@ $(document).ready(function () {
         $("#ss_elem_list1").html(input_html_genename);
 
         $("#myfilterbox").removeClass("hidden");
+        
         // console.log("OGH33333");
 
     }
@@ -1386,24 +1387,25 @@ $(document).ready(function () {
             instance.destroy();
         });
         document.getElementById("myfilterbox").classList.add("hidden");
+        
         document.getElementById("figure1").classList.add("hidden");
         document.getElementById("dashline2").classList.add("hidden");
         document.getElementById("figure2").classList.add("hidden");
         document.getElementById("dashline3").classList.add("hidden");
         document.getElementById("figure3").classList.add("hidden");
-        document.getElementById("dashline4").classList.add("hidden");
-        document.getElementById("inlineFrameExample-id").classList.add("hidden");
+
+
     }
 
     function showPage() {
         document.getElementById("myfilterbox").classList.remove("hidden");
+        
         document.getElementById("figure1").classList.remove("hidden");
         document.getElementById("dashline2").classList.remove("hidden");
         document.getElementById("figure2").classList.remove("hidden");
         document.getElementById("dashline3").classList.remove("hidden");
         document.getElementById("figure3").classList.remove("hidden");
-        document.getElementById("dashline4").classList.remove("hidden");
-        document.getElementById("inlineFrameExample-id").classList.remove("hidden");
+
     }
 
     
