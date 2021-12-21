@@ -316,7 +316,7 @@ $(document).ready(function () {
             if (mydatasets.length == 0) {
                 // // console.log("len 0");
 
-                document.getElementById("aftersubmit1").innerHTML = "Gene " + gene_name + " Not found in MicroArray database..."
+                document.getElementById("aftersubmit1").innerHTML = "Gene " + $('#fname').val() + " Not found in MicroArray database..."
             }
             else {
                 // console.log("mydataset len > 0")
@@ -653,7 +653,7 @@ $(document).ready(function () {
             if (mydatasets_rna.length == 0) {
                 // console.log("len 0");
 
-                    document.getElementById("aftersubmit2").innerHTML = "Gene " + gene_name + " Not found in RNA-seq database..."
+                    document.getElementById("aftersubmit2").innerHTML = "Gene " + $('#fname').val() + " Not found in RNA-seq database..."
 
             }
             else {
@@ -932,6 +932,7 @@ $(document).ready(function () {
         var ctx3 = canva3.getContext('2d');
 
         data = processResult[4];
+        
         mydatasets_chipseq = [];
         var count = 0
         var max_len = 0
@@ -981,7 +982,7 @@ $(document).ready(function () {
         ////////
         if (mydatasets_chipseq.length == 0) {
             // console.log("len 0");
-            document.getElementById("aftersubmit3").innerHTML = "Gene " + gene_name + " Not found in Chip-seq database..."
+            document.getElementById("aftersubmit3").innerHTML = "Gene " + $('#fname').val() + " Not found in Chip-seq database..."
 
         }
         else {

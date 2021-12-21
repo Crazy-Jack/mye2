@@ -12,6 +12,7 @@ from .models import *
 from .handle_file import handle
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Max, Min
+from django.db.models import Q
 import sys, datetime, time
 import ujson, json
 import hashlib
@@ -19,6 +20,7 @@ import csv
 import numpy as np
 import re
 import pickle
+import os 
 
 # ========================= RENDER PAGES ==============================
 def render_index_page(request):
@@ -33,7 +35,10 @@ def render_upload_page(request):
 def render_search_page(request):
     """test_render_search_page"""
     # preload data
-    with open("/home/tianqinl/mye2/cirDraw/tools/cache.pkl", 'rb') as f:
+    prepath = "/home/tianqinl/mye2/cirDraw/tools/cache.pkl"
+    if not os.path.isfile(prepath):
+        prepath = "/home/tianqinl/Code/mye2/cirDraw/tools/cache.pkl"
+    with open(prepath, 'rb') as f:
          all_out_data = pickle.load(f)
     all_out_data_json = json.dumps(all_out_data)
     context = {'preload': all_out_data_json}
@@ -74,11 +79,132 @@ def render_display_page(request, md5):
 # ====================================================================
 
 @csrf_exempt
-def get_stats(request):
-    gene_name = request.GET['gene_name']
-    print(gene_name)
-    print("hellp")
-    return JsonResponse({'gene': gene_name}, safe=False)
+def get_stats(request): 
+    celllines = request.GET['celllines']
+    if len(celllines) == 0:
+        celllines = 'ALL'
+    else:
+        celllines = celllines[:-1].split(";")
+    
+    # duration
+    durations = request.GET['durations']
+    if len(durations) == 0:
+        durations = 'ALL'
+    else:
+        print(durations[:-1])
+        durations = [int(i[:-5]) for i in durations[:-1].split(";")]
+    
+    
+    # dose
+    doses = request.GET['doses']
+    if len(doses) == 0:
+        doses = 'ALL'
+    else:
+        doses = [int(i[:-3]) for i in doses[:-1].split(";")]
+    
+    
+    # uppercent 
+    up_percent = request.GET['up_percent']
+    down_percent = request.GET['down_percent']
+    adj_p_value = request.GET['adj_p_value']
+    logfc = request.GET['logfc']
+    
+    if up_percent == "-1":
+        mode = "down"
+        mode_sign = "<"
+        logfc = str(-float(logfc))
+        percent = str(float(down_percent) * 0.01)
+    elif down_percent == '-1':
+        mode = "up"
+        mode_sign = ">"
+        percent = str(float(up_percent) * 0.01)
+    else:
+        raise ValueError(f"up_percent {up_percent} BUT down_percent {down_percent}")
+
+    # check sanity
+    print(f"durations {durations}")
+    print(f"doses {doses}")
+    print(f"celllines {celllines}")
+    
+    # MicroArray
+    if celllines != 'ALL' or durations != 'ALL' or doses != 'ALL':
+        query = "WHERE "
+        if celllines != 'ALL':
+            query += "(CellLine = '" + str(celllines[0]) + "'"
+            if len(celllines) > 1:
+                for cell_line in celllines[1:]:
+                    query += " OR CellLine = '" + str(cell_line) + "'"
+            query += ")"
+            query += " AND "
+        
+        if durations != 'ALL':
+            query += "(Duration = " + str(durations[0]) 
+            if len(durations) > 1:
+                for duration in durations[1:]:
+                    query += " OR Duration = " + str(duration)
+            query += ")"
+            query += " AND "
+        
+        if doses != 'ALL':
+            query += "(Dose = " + str(doses[0]) 
+            if len(doses) > 1:
+                for dose in doses[1:]:
+                    query += " OR Dose = " + str(dose)
+            query += ")"
+    
+        print(query)
+    else:
+        query = ""
+    sql_query = f'''
+    select 1 as id, C.ins_count, C.genename, C.logfc_percent, C.log10padj_percent from (select count(A.GeneName) 
+    as ins_count,A.GeneName, AVG(Log2FC{mode_sign}{logfc}) as logfc_percent, AVG(minus_log10padj>{str(-np.log10(float(adj_p_value)))}) as log10padj_percent from 
+    (select GeneName, Log2FC, minus_log10padj from CombinedData {query}) as A group by A.GeneName ORDER BY ins_count DESC) C 
+    where C.logfc_percent > {percent} AND C.log10padj_percent > {percent};'''
+    print('SQL: ', sql_query)
+    data_p = SearchTable.objects.raw(sql_query)
+    print(len(data_p))
+   
+    print(data_p.columns)
+    data_microarray = []
+    # TODO: get the return of microarray ready
+    for data_i in data_p:
+        # print(data_i.ins_count, data_i.genename)
+        obj_i = {
+            'ins_count': data_i.ins_count,
+            'genename': data_i.genename,
+            'logfc_percent': round(data_i.logfc_percent * 100, 2),
+            'log10padj_percent': data_i.log10padj_percent,
+        }
+        data_microarray.append(obj_i)
+    
+
+    ## RNA-seq
+    sql_query = f'''
+    select 1 as id, C.ins_count, C.genename, C.logfc_percent, C.log10padj_percent from (select count(A.GeneName) 
+    as ins_count,A.GeneName, AVG(Log2FC{mode_sign}{logfc}) as logfc_percent, AVG(minus_log10padj>{str(-np.log10(float(adj_p_value)))}) as log10padj_percent from 
+    (select GeneName, Log2FC, minus_log10padj from RNAseqData {query}) as A group by A.GeneName ORDER BY ins_count DESC) C 
+    where C.logfc_percent > {percent} AND C.log10padj_percent > {percent};'''
+    print('RNAseq SQL: ', sql_query)
+    data_p = SearchTable.objects.raw(sql_query)
+    print(len(data_p))
+   
+    print(data_p.columns)
+    data_rnaseq = []
+    # TODO: get the return of microarray ready
+    for data_i in data_p:
+        # print(data_i.ins_count, data_i.genename)
+        obj_i = {
+            'ins_count': data_i.ins_count,
+            'genename': data_i.genename,
+            'logfc_percent': round(data_i.logfc_percent * 100, 2),
+            'log10padj_percent': data_i.log10padj_percent,
+        }
+        data_rnaseq.append(obj_i)
+    
+
+
+    
+    return JsonResponse([data_microarray, data_rnaseq], safe=False)
 
 
 
@@ -182,50 +308,54 @@ def search_indb(request):
 
     # chipseq
     start_chipseq = time.time()
-    gene_info = SearchTableChipSeqRefData.objects.filter(gene__exact = gene_name)
-    chr_num = gene_info[0].chr_num
-    tss = np.mean([i.tss for i in gene_info])
-    up_tss = max(0, tss - 200000)
-    down_tss = tss + 200000
-    data_chip = SearchTableChipSeq.objects.filter(chr_num__exact = chr_num).filter(mid__gt = up_tss).filter(mid__lt=down_tss)
-    print([i.score for  i in data_chip])
-    print(f"chipseq time is {time.time() - start_chipseq}")
-    end_time = time.time()
-    out_data = {}
-    for data_i in data_chip:
-        mid = data_i.mid
-        score = data_i.score # ???
-        CellLine = data_i.Cellline.replace(" ", "")
-        Dose = data_i.Dose
-        Duration = data_i.Duration.replace(" ", "").replace(",", "-")
-        GSE = data_i.GSE
+    print(f"---------gene_name {gene_name}")
+    gene_info = SearchTableChipSeqRefData.objects.filter(gene__exact = gene_name) 
+    print(f"----gene_info {len(gene_info)}")
+    if len(gene_info) > 0:
+        chr_num = gene_info[0].chr_num
+        tss = np.mean([i.tss for i in gene_info])
+        up_tss = max(0, tss - 200000)
+        down_tss = tss + 200000
+        data_chip = SearchTableChipSeq.objects.filter(chr_num__exact = chr_num).filter(mid__gt = up_tss).filter(mid__lt=down_tss)
+        print([i.score for  i in data_chip])
+        print(f"chipseq time is {time.time() - start_chipseq}")
         
-        # print(f"data_i.filename {data_i.filename} out {out_name}: hour: {hours}; dose {dose}")
-        # create object to append
+        out_data = {}
+        for data_i in data_chip:
+            mid = data_i.mid
+            score = data_i.score # ???
+            CellLine = data_i.Cellline.replace(" ", "")
+            Dose = data_i.Dose
+            Duration = data_i.Duration.replace(" ", "").replace(",", "-")
+            GSE = data_i.GSE
+            
+            # print(f"data_i.filename {data_i.filename} out {out_name}: hour: {hours}; dose {dose}")
+            # create object to append
 
-        duration, multi_duration = convert_RNAseq_hour_radius(Duration)
+            duration, multi_duration = convert_RNAseq_hour_radius(Duration)
 
 
-        obj = {"log2score": np.log2(float(score)),
-                "tss": (mid - tss)/1000,
-                "name": CellLine,
-                "duration": duration,
-                "multi_duration": multi_duration,
-                "dose": Dose,
-                "GSE": GSE,
-            }
-        if CellLine not in out_data:
-            out_data[CellLine] = [obj]
-        else:
-            out_data[CellLine].append(obj)
+            obj = {"log2score": np.log2(float(score)),
+                    "tss": (mid - tss)/1000,
+                    "name": CellLine,
+                    "duration": duration,
+                    "multi_duration": multi_duration,
+                    "dose": Dose,
+                    "GSE": GSE,
+                }
+            if CellLine not in out_data:
+                out_data[CellLine] = [obj]
+            else:
+                out_data[CellLine].append(obj)
+    else:
+        out_data = {}
     all_out_data.append(out_data)
+    end_time = time.time()
     total_time = end_time - start_time
     print(f"Total time {total_time} s")
-    # save data
-
-    # with open("/home/tianqinl/mye2/cirDraw/tools/cache.pkl", 'wb') as f:
-    #     pickle.dump(all_out_data, f)
+   
     return JsonResponse(all_out_data, safe=False)
+
 
 
 def calculate_statistics(out_data, threshold_fc):

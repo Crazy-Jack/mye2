@@ -4,26 +4,16 @@
 
 {% block content %}
 
-<div id="search-container" class="container" style="padding-top: 55px;">
-  <div id="uploadarea" class="center horizon">
-
-    <form id="fileform" action="/search/">
-      {% csrf_token %}
-      <label for="fname">Enter Up Regulate Percetage: </label>
-      <input type="text" id="fname" class="hint" name="fname" value="GREB1"  
-          onfocus="if (this.className=='hint') { this.className = ''; this.value = 'GREB1'; }"
-          onblur="if (this.value == '') { this.className = 'hint'; this.value = 'GREB1'; }">
-      <input type="submit" id="submit" value="Search">
-      <!-- <a id="refresher" href='/tools/'><i class="fas fa-redo-alt ml-1"></i></a> -->
-    </form>
-    <div id="processtip" style="margin-left: 10px; margin-top: 7px;"></div>
-  </div>
+<div id="search-container" class="container" style="padding-top: 55px; padding-right: 20em;">
+  
 
   <!-- <span class="demo" title="hello" data-tipso="I'm a tooltip">Hover me</span> -->
 <div id="myfilterbox" class="listbox-area">
   <div>
-    <span id="ss_elem" class="listbox-label"><b>Select Criterion:</b></span>
+    
+    <div id="ss_elem" class="listbox-label"><b>Select Criterion:</b></div>
     <div style="display:flex;">
+      <div style="padding-left: 4em;"></div>
       <div>
         <span>Cell Line:</span>
         <ul class="ss_elem_list" id="ss_elem_list1" tabindex="0" role="listbox" aria-labelledby="ss_elem"> 
@@ -46,7 +36,7 @@
           <li id="ss_elem_MM415" role="option">MM415</li>
         </ul>
       </div>
-      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 35vh;">&nbsp;</div>
+      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 25vh;">&nbsp;</div>
       <div style="font-size:30px; padding:15px; ">&nbsp;</div>
       <div>
         <span>Duration:</span>
@@ -65,7 +55,7 @@
         </ul>
       </div>
 
-      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 35vh;">&nbsp;</div>
+      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 25vh;">&nbsp;</div>
       <div style="font-size:30px; padding:15px; ">&nbsp;</div>
       <div>
         <span>Dose:</span>
@@ -76,25 +66,104 @@
         </ul>
       </div>
 
-      <div style="font-size:30px; padding:15px; border-right: 1px dashed black;height: 35vh;">&nbsp;</div>
-      <div style="font-size:30px; padding:15px; ">&nbsp;</div>
-      <div>
-        <span>Adjusted p-value (<)</span>
-        <ul class="ss_elem_list" id="ss_elem_list4" tabindex="0" role="listbox" aria-labelledby="ss_elem"> 
-          <li id="ss_elem_4_1" role="option">0.05</li>
-          <li id="ss_elem_4_2" role="option">0.1</li>
-          <li id="ss_elem_4_3" role="option">ALL</li>
-        </ul>
-      </div>
+     
+      
     </div>
   </div>
 </div>
     
 
-  <!-- <p id="aftersubmit"></p> -->
-  
-
 </div>
+</div>
+
+<div style="border-top: 4em;" class="container">
+  <div style="padding-top: 2em;"></div>
+  <h3>Up-Regulation</h3>
+  <div style="display: flex; width: 100%;">
+    <form id="fileform" action="/search/">
+      {% csrf_token %}
+
+      <label for="fname1">Mininum Up Regulate Percetage: </label>
+      <input type="text" id="fname1" class="hint" name="fname1" value="50"   size="3em"
+          onfocus="if (this.className=='hint') { this.className = ''; this.value = '50'; }"
+          onblur="if (this.value == '') { this.className = 'hint'; this.value = '50'; }">
+      <div style="padding-left: 1em;"></div>
+      <label for="fname1_1">Log Fold Change Cutoff: </label>
+      <input type="text" id="fname1_1" class="hint" name="fname1_1" value="0.5"  size="3em"
+          onfocus="if (this.className=='hint') { this.className = ''; this.value = '0.5'; }"
+          onblur="if (this.value == '') { this.className = 'hint'; this.value = '0.5'; }">
+      <div style="border-left: 1em;"></div>
+      <label for="fname1_2">Adjusted P-Value Cutoff: </label>
+      <input type="text" id="fname1_2" class="hint" name="fname1_2" value="0.1"   size="3em"
+          onfocus="if (this.className=='hint') { this.className = ''; this.value = '0.1'; }"
+          onblur="if (this.value == '') { this.className = 'hint'; this.value = '0.1'; }">
+      <div style="border-left: 1em;"></div>
+      <div style="display: flex;">
+        <input type="submit" id="submit1" value="Search">
+        <div id="processtip1" style="margin-left: 10px; margin-top: 7px;"></div>
+      </div>
+      
+      <!-- <a id="refresher" href='/tools/'><i class="fas fa-redo-alt ml-1"></i></a> -->
+    </form>
+    
+  </div>
+  <div style="padding: 1em;"></div>
+  
+  <div id="post_table_1" style="width: 50em;" class="">
+    <div id="num_genes_1" style="padding-bottom: 1em;"></div>
+    <table id="microarray_table_up_1">
+    </table>
+
+    <div id="num_genes_1_rna" style="padding-bottom: 1em; padding-top: 2em;"></div>
+    <table id="rnaseq_table_up_1">
+    </table>
+
+  </div>
+
+  <div style="padding: 1em;"></div>
+  <h3>Down-Regulation</h3>
+  <div style="display: flex; width: 100%;">
+    <form id="fileform" action="/search/">
+      {% csrf_token %}
+
+      <label for="fname2">Mininum Down Regulate Percetage: </label>
+      <input type="text" id="fname2" class="hint" name="fname2" value="50"   size="3em"
+          onfocus="if (this.className=='hint') { this.className = ''; this.value = '50'; }"
+          onblur="if (this.value == '') { this.className = 'hint'; this.value = '50'; }">
+      <div style="padding-left: 1em;"></div>
+      <label for="fname2_1">Log Fold Change Cutoff: </label>
+      <input type="text" id="fname2_1" class="hint" name="fname2_1" value="0.5"  size="3em"
+          onfocus="if (this.className=='hint') { this.className = ''; this.value = '0.5'; }"
+          onblur="if (this.value == '') { this.className = 'hint'; this.value = '0.5'; }">
+      <div style="border-left: 1em;"></div>
+      <label for="fname2_2">Adjusted P-Value Cutoff: </label>
+      <input type="text" id="fname2_2" class="hint" name="fname2_2" value="0.1"   size="3em"
+          onfocus="if (this.className=='hint') { this.className = ''; this.value = '0.1'; }"
+          onblur="if (this.value == '') { this.className = 'hint'; this.value = '0.1'; }">
+      <div style="border-left: 1em;"></div>
+      <div style="display: flex;">
+        <input type="submit" id="submit2" value="Search">
+        <div id="processtip2" style="margin-left: 10px; margin-top: 7px;"></div>
+      </div>
+      
+      <!-- <a id="refresher" href='/tools/'><i class="fas fa-redo-alt ml-1"></i></a> -->
+    </form>
+    
+  </div>
+  <div style="padding: 1em;"></div>
+  
+  <div id="post_table_2" style="width: 50em;" class="">
+    <div id="num_genes_2" style="padding-bottom: 1em;"></div>
+    <table id="microarray_table_up_2">
+    </table>
+
+    <div id="num_genes_2_rna" style="padding-bottom: 1em; padding-top: 2em;"></div>
+    <table id="rnaseq_table_up_2">
+    </table>
+  </div>
+ 
+</div>
+
 
 
 
