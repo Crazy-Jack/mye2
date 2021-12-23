@@ -159,51 +159,60 @@ $(document).ready(function () {
         console.log("microarray_response_num " + microarray_response_num)
         $(`#num_genes_${id_mode}`).html(`<div id="num_genes_${id_mode}" style="padding-bottom: 1em;">Got <u>${microarray_response_num}</u> Significant Genes for <b>MicroArray</b> <a id='export_${id_mode}' color="black" download="" href="#"><u><span style="color:red">(export)</u></span></a>:</div>`)
         // Convert to microarray data
-        var str_micro = "GeneName\tNumOfData\tSignifiLogFCPercent\tSignifiPvaluePercent\n"
+        var str_micro = "GeneName\tNumOfData\tSignifiLogFCPercent\n"
         var microarray_table_html = `<table id="microarray_table_up_${id_mode}">
         <thead>
           <tr>
             <th scope="col">GeneName</th>
             <th scope="col">Num. of Data</th>
             <th scope="col">Significant LogFC Percentage (%)</th>
-            <th scope="col">Significant p-value Percentage (%)</th>
           </tr>
         </thead>
         <tbody>
         `;
-
+        var data_plot_1 = []
         for (i in processResult[0]) {
             if (i == 3) {
                 microarray_table_html += `<tr  class="header${id_mode}">
-                    <th colspan="4">Show the rest results <span>+</span></th>
+                    <th colspan="3">Show the rest results <span>+</span></th>
                     </tr>`
             }
             var ins_count = processResult[0][i].ins_count;
             var genename = processResult[0][i].genename;
             var logfc_percent =  processResult[0][i].logfc_percent
-            var padj_percent = Math.pow(10, -processResult[0][i].log10padj_percent).toFixed(2);
-
+            
             microarray_table_html += `
                 <tr>
                     <th scope="row">${genename}</th>
                     <td>${ins_count}</td>
                     <td>${logfc_percent}</td>
-                    <td>${padj_percent}</td>
                 </tr>
             `
-            str_micro += `${genename}\t${ins_count}\t${logfc_percent}\t${padj_percent}\n`
+            str_micro += `${genename}\t${ins_count}\t${logfc_percent}\n`
+
+            data_plot_1.push({
+                x: i,
+                y: processResult[0][i].logfc_percent,
+                r: processResult[0][i].ins_count * 0.1
+            })
         }
+
+        data_plot_1 = {
+            datasets: [{
+              label: 'First Dataset',
+              data: data_plot_1,
+              backgroundColor: 'rgb(255, 99, 132)'
+            }]
+          };
+
         microarray_table_html += `
                 </tbody>
             </table>
         `
-        $(`#microarray_table_up_${id_mode}`).html(microarray_table_html)
+        $(`#microarray_table_up_${id_mode}`).html(microarray_table_html);
         
-
-
-        // var str_rna = "hi,file";
-        // var str_micro = "hehehef\tfefe\nggjj\tgkkd\n"
-        
+        // Adding plots
+        // Setup svg using Bostock's margin convention
 
 
 
@@ -212,14 +221,13 @@ $(document).ready(function () {
         console.log("rna_response_num " + rna_response_num)
         $(`#num_genes_${id_mode}_rna`).html(`<div id="num_genes_${id_mode}_rna" style="padding-bottom: 1em;">Got <u>${rna_response_num}</u> Significant Genes for <b>RNA-seq</b> <a id='export_${id_mode}_rna' download="" href="#"><u><span style="color:red">(export)</u></span></u></a>:</div>
         `)
-        var str_rna = "GeneName\tNumOfData\tSignifiLogFCPercent\tSignifiPvaluePercent\n"
+        var str_rna = "GeneName\tNumOfData\tSignifiLogFCPercent\n"
         var rnaseq_table_html = `<table id="rnaseq_table_up_${id_mode}">
         <thead>
           <tr>
             <th scope="col">GeneName</th>
             <th scope="col">Num. of Data</th>
             <th scope="col">Significant LogFC Percentage (%)</th>
-            <th scope="col">Significant p-value Percentage (%)</th>
           </tr>
         </thead>
         <tbody>
@@ -228,23 +236,21 @@ $(document).ready(function () {
         for (i in processResult[1]) {
             if (i == 3) {
                 rnaseq_table_html += `<tr  class="header${id_mode}">
-                    <th colspan="4">Show the rest results <span>+</span></th>
+                    <th colspan="3">Show the rest results <span>+</span></th>
                     </tr>`
             }
             var ins_count = processResult[1][i].ins_count;
             var genename = processResult[1][i].genename;
             var logfc_percent =  processResult[1][i].logfc_percent
-            var padj_percent = Math.pow(10, -processResult[1][i].log10padj_percent).toFixed(2);
-
+            
             rnaseq_table_html += `
                 <tr>
                     <th scope="row">${genename}</th>
                     <td>${ins_count}</td>
                     <td>${logfc_percent}</td>
-                    <td>${padj_percent}</td>
                 </tr>
             `
-            str_rna += `${genename}\t${ins_count}\t${logfc_percent}\t${padj_percent}\n`
+            str_rna += `${genename}\t${ins_count}\t${logfc_percent}\n`
         }
         rnaseq_table_html += `
                 </tbody>

@@ -108,9 +108,12 @@
     
   </div>
   <div style="padding: 1em;"></div>
-  
+  <svg></svg>
   <div id="post_table_1" style="width: 50em;" class="">
     <div id="num_genes_1" style="padding-bottom: 1em;"></div>
+    <div id="chart-micro-1-container" class="hidden">
+      
+    </div>
     <table id="microarray_table_up_1">
     </table>
 
@@ -181,6 +184,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-box-and-violin-plot@2.4.0/build/Chart.BoxPlot.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="{% static 'tools/js/stats.js' %}"></script>
 <script src="{% static 'tools/js/select.js' %}"></script>
 <script src="{% static 'tools/js/tipso.js' %}"></script>
@@ -191,5 +195,9 @@
       return txt.value;
   }
   var preload = decodeHtml("{{preload}}");
+
+  
+
+
 </script>
 {% endblock %}

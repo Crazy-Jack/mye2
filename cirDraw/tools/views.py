@@ -157,8 +157,8 @@ def get_stats(request):
         query = ""
     sql_query = f'''
     select 1 as id, C.ins_count, C.genename, C.logfc_percent, C.log10padj_percent from (select count(A.GeneName) 
-    as ins_count,A.GeneName, AVG(Log2FC{mode_sign}{logfc}) as logfc_percent, AVG(minus_log10padj>{str(-np.log10(float(adj_p_value)))}) as log10padj_percent from 
-    (select GeneName, Log2FC, minus_log10padj from CombinedData {query}) as A group by A.GeneName ORDER BY ins_count DESC) C 
+    as ins_count,A.GeneName, AVG(Log2FC{mode_sign}{logfc}) as logfc_percent, AVG(minus_log10padj>{str(-np.log10(float(adj_p_value)))} OR A.minus_log10padj=0.0) as log10padj_percent from 
+    (select GeneName, Log2FC, minus_log10padj from CombinedData {query}) as A group by A.GeneName ORDER BY ins_count DESC, logfc_percent DESC) C 
     where C.logfc_percent > {percent} AND C.log10padj_percent > {percent};'''
     print('SQL: ', sql_query)
     data_p = SearchTable.objects.raw(sql_query)
@@ -181,8 +181,8 @@ def get_stats(request):
     ## RNA-seq
     sql_query = f'''
     select 1 as id, C.ins_count, C.genename, C.logfc_percent, C.log10padj_percent from (select count(A.GeneName) 
-    as ins_count,A.GeneName, AVG(Log2FC{mode_sign}{logfc}) as logfc_percent, AVG(minus_log10padj>{str(-np.log10(float(adj_p_value)))}) as log10padj_percent from 
-    (select GeneName, Log2FC, minus_log10padj from RNAseqData {query}) as A group by A.GeneName ORDER BY ins_count DESC) C 
+    as ins_count,A.GeneName, AVG(Log2FC{mode_sign}{logfc}) as logfc_percent, AVG(A.minus_log10padj>{str(-np.log10(float(adj_p_value)))} OR A.minus_log10padj=0.0) as log10padj_percent from 
+    (select GeneName, Log2FC, minus_log10padj from RNAseqData {query}) as A group by A.GeneName ORDER BY ins_count DESC, logfc_percent DESC) C 
     where C.logfc_percent > {percent} AND C.log10padj_percent > {percent};'''
     print('RNAseq SQL: ', sql_query)
     data_p = SearchTable.objects.raw(sql_query)
